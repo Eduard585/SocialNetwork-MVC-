@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/jquery.loading-indicator.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/slick.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/slick-theme.css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="http://twitter.github.com/hogan.js/builds/3.0.1/hogan-3.0.1.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.loading-indicator.js"></script>
+    <script type="text/javascript" src="~/Scripts/slick.min.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Login", "Login", "User", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Registration", "Registration", "User", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("UserProfile", "EditProfile", "UserProfile", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Posts", "Index", "Post", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("My Posts", "Index", "Post/my", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr class="col-md-4 col-md-offset-4" />
+        <footer></footer>
+    </div>
+</body>
+
+</html>
+
+<script>
+    var homeLoader = {
+        loader: {},
+        loaderInit: function () {
+            console.log(this.loader);
+            if ($.isEmptyObject(this.loader)) {
+                this.loader = $('body').loadingIndicator({
+                    useImage: false,
+                    showOnInit: false,
+                }).data("loadingIndicator");
+            }
+
+        },
+
+        show: function () {
+            this.loaderInit();
+            this.loader.show();
+        },
+        hide: function () {
+            this.loaderInit();
+            this.loader.hide();
+        },
+    };
+</script>
+
+<script>
+    function createSlick() {
+        $('.ImgDiv').not('.slick-initialized').slick();
+    }
+    $(document).ready(function () {
+        createSlick();
+    });
+</script>

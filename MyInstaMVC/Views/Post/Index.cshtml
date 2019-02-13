@@ -1,0 +1,222 @@
+﻿@model MyInstaMVC.Models.PostModel
+<script type="text/template" id="ComTemplate">
+    @Html.Raw(Html.Partial("_comTemplate"))
+</script>
+
+<script>
+    var formIsMy = '@(Model.FormMode==MyInstaMVC.Models.PostFormMode.my?1:0)' == '1';
+    var currentPage = 0;
+   function InitForm() {
+        $("#CreateForm").html("");
+    }
+
+   
+
+    function NextPage() {
+        var nextPage = currentPage +1;
+
+        $.get("@Url.Action("GetPosts")", { page: nextPage, my: formIsMy }).done(function (res) {
+
+            $("#MainContainer").append(res);
+            currentPage = nextPage;
+        });
+        createSlick();
+    }
+
+    function Create() {
+        homeLoader.show();
+
+        $.get("@Url.Action("Create")").done(function (res) {
+            $("#CreateForm").html(res);
+            
+        });
+        homeLoader.hide();
+    }
+
+    function CreateAdmin() {
+        homeLoader.show();
+        $.get("@Url.Action("CreateAdmin")").done(function (res) {
+            $("#CreateForm").html(res);
+            homeLoader.hide();
+        });
+    }
+
+    function getFormData(selector) {
+        var $form = $(selector);
+        const unindexedArray = $form.find(':input').serializeArray();
+        const indexedArray = {};
+        
+        $.map(unindexedArray, function (n) {
+            
+            indexedArray[n.name] = n.value.trim();
+            
+        });
+
+        return indexedArray;
+    }
+
+    function PublishPost(id, elem) {
+       var currentEl= $(elem).parents(".PostDiv");
+
+
+        $.post('@Url.Action("PublishPost")', { id: id }).done(function (res) {
+            if (res.Success)
+
+                $.get("@Url.Action("GetPost")", { id: id }).done(function (res2) {
+                    currentEl.before(res2);
+                    currentEl.remove()
+                });
+
+
+
+            else
+                alert(res.Result);
+
+
+
+
+        });
+
+
+    }
+
+    function LikeClick(elem) {
+       
+    }
+
+    function ExistInit(a) {
+        if (a == '0') {
+            $(".next_link").hide();
+        }
+    }
+
+    function RenderCommentHtml(data) {
+        var temp = $("#ComTemplate").html();
+        var template = Hogan.compile(temp);
+        return template.render(data);
+    }
+
+    function RenderLikeHtml(data){
+        var temp = $("#LikeTemplate").html();
+        var template = Hogan.compile(temp);
+        return template.render(data);
+    }
+
+    $(function () {
+        $(document).on("click", ".AddCommentButton", AddCommentButtonClick)
+        $(document).on("click", ".SendCommentText", SendCommentTextClick)
+        $(document).on("click", ".ViewCommentsButton", ViewCommentsButtonClick)
+        $(document).on("click", ".LikeButton", AddLikeButtonClick)
+    });
+
+    function AddLikeButtonClick(e) {
+        e.preventDefault();
+        var post = $(this).parents(".PostDiv");
+        var like = $(this).parents(".LikeDiv");
+        var postId = post.data("post-id");
+        $.post('@Url.Action("AddLike")', { postId: postId }).done((res) => {
+            if (res.Success) {
+                post.find(".likeDiv").empty();
+                post.find(".likeDiv").append(res.Result)
+            }
+        
+        })
+
+        if ($(this).is(".White")) {
+            $(this).removeClass("White")
+            $(this).addClass("Red")
+        }
+        else {
+            $(this).removeClass("Red")
+            $(this).addClass("White")
+        }
+
+    }
+
+   
+
+     function AddCommentButtonClick(e) {
+        e.preventDefault();
+        $(".AddCommentButton").show();
+        $(this).hide();
+         $(".AddComentDiv").hide();
+        $(this).parents(".PostDiv").find(".AddComentDiv").show();
+    }
+
+    function SendCommentTextClick(e) {
+        e.preventDefault();
+
+         var post = $(this).parents(".PostDiv");
+        var comInput = $(this).parent().find(".CommentText");
+        var postId = post.data("post-id");
+         $.post('@Url.Action("AddComment")', { postId: postId, commentText: comInput.val() }).done((res) => {
+            if (res.Success) {
+                post.find(".commentDiv").append(RenderCommentHtml({ Comments: [res.Result] }))
+                comInput.val('');
+                $(".AddCommentButton").show();
+                $(".AddComentDiv").hide();
+             }
+         }).always();
+    }
+
+     function ViewCommentsButtonClick(e) {
+        e.preventDefault();
+        var post = $(this).parents(".PostDiv");
+         if ($(this).data("toogle") == "view") {
+
+            var postId = post.data("post-id");
+            $.get('@Url.Action("GetComments")/' + postId).done((res) => {
+                post.find(".commentDiv").html(RenderCommentHtml(res))
+            }).always();
+             $(this).data("toogle","hide");
+            $(this).text("HideComments");
+        }
+        else {
+            var lastComment = post.find(".commentDiv :last-child.comm");
+            post.find(".commentDiv").html(lastComment);
+            $(this).data("toogle", "view");
+            $(this).text("ViewComment");
+         }
+    }
+
+</script>
+<style>
+
+    .Img_Preview {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 15px;
+        cursor: crosshair;
+    }
+
+        .Img_Preview:hover {
+            border: 2px dashed red;
+        }
+
+    .PostDiv {
+        border: 2px blue solid;
+    }
+</style>
+
+@if (Model.ShowAdminControl == true)
+{
+    <a href="javascript:void(0);" onclick="CreateAdmin();">CreateAdmin</a>
+}
+@if (Model.ShowAdminControl == false)
+{
+    <a href="javascript:void(0);" onclick="Create();">Create</a>
+}
+<div id="CreateForm">
+</div>
+<div id="MainContainer">
+
+    @foreach (var post in Model.Posts)
+    {
+        Html.RenderPartial("_PostView", post);
+        
+    }
+</div>
+@if (Model.NextExist)
+{
+    <a href="javascript:void(0);" class="next_link" onclick="NextPage()">Next...</a>
+}
