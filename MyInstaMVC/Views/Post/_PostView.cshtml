@@ -1,0 +1,65 @@
+﻿@model BLL.DTO.PostDTO
+<style>
+    .LikeButtonDiv :hover {
+        color: #fb7777;
+    }
+
+    .White{
+        background-color: white;
+    }
+
+    .Red{
+        background-color: red;
+    }
+
+</style>
+
+<div class="PostDiv" data-post-id="@Model.Id">
+    <div class="ImgDiv">
+        @foreach (var image in Model.Images)
+        {
+
+            <div><img src='@Url.Action("GetImage")/@image.Id' class='Img_Preview' /></div>
+
+        }
+    </div>
+    <hr />
+    <div>
+        @Model.Description<br />
+    </div>
+    <div>
+        @if (Model.PublicateDate.ToString() != null)
+        {
+            <a href="javascript:void(0);" onclick="PublishPost('@Model.Id', this)">publish</a>
+        }
+        else
+        {
+            <text>@Model.PublicateDate.ToString()</text>
+        }
+    </div>
+    <button class="ViewCommentsButton" data-toogle="view">ViewComments</button>
+    <div class="commentDiv">
+        @Html.Raw(Nustache.Core.Render.StringToString(Html.Partial("_comTemplate").ToString(), new { Comments = Model.Comments.OrderByDescending(x => x.Date).Take(1) }))
+    </div>
+    <div class="AddComentDiv" style="display:none">
+        <textarea class="CommentText"></textarea>
+        <button class="SendCommentText">Send</button>
+    </div>
+    <button class="AddCommentButton">AddComent</button>
+
+    @if (Model.IsLiked == false)
+    {
+        <div class="LikeButtonDiv">
+            <button class="LikeButton White">Like</button>
+        </div>
+    }
+    else
+    {
+        <div class="LikeButtonDiv">
+            <button class="LikeButton Red">Like</button>
+        </div>
+    }
+    <div class="likeDiv">
+        <text>@Model.Likes.Count()</text>
+    </div>
+</div>
