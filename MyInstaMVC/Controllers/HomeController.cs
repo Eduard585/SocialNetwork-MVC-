@@ -13,5 +13,10 @@ namespace MyInstaMVC.Controllers
 
             return View();
         }
+
+        public ActionResult ViewPage1()
+        {
+            return View();
+        }
     }
 }

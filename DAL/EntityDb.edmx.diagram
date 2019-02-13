@@ -23,6 +23,9 @@
         <AssociationConnector Association="Insta_DataBaseModel.FK_Subscribtions_Users" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Subscribtions_Users1" />
         <AssociationConnector Association="Insta_DataBaseModel.RoleMap" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Love" Width="1.5" PointX="5.375" PointY="10.5" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.sysdiagrams" Width="1.5" PointX="0.5" PointY="0.5" />
+        <AssociationConnector Association="Insta_DataBaseModel.FK_Love_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
