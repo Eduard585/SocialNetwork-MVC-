@@ -102,9 +102,6 @@
     <Compile Include="Subscribtions.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagrams.cs">
-      <DependentUpon>EntityDb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Users.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>

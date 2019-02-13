@@ -36,6 +36,7 @@ namespace DAL
         public bool SharedProfile { get; set; }
         public byte[] AvatarContent { get; set; }
         public string AvatarMime { get; set; }
+        public string Gender { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comments> Comments { get; set; }

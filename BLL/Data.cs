@@ -31,7 +31,7 @@ namespace BLL
                       dbUser.RegDate = user.RegDate;
                       dbUser.Salt = user.Salt;
                       dbUser.SharedProfile = user.SharedProfile;
-                      
+                      dbUser.Gender = user.Gender;
                       dbUser.AvatarContent = user.AvatarContent;
                       dbUser.AvatarMime = user.AvatarMime;
 

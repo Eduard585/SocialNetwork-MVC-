@@ -32,9 +32,6 @@ namespace DAL
         public virtual DbSet<PostTags> PostTags { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Subscribtions> Subscribtions { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Users> Users { get; set; }
-
-       
     }
 }

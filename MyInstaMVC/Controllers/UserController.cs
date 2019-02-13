@@ -45,6 +45,7 @@ namespace MyInstaMVC.Controllers
                     RegDate = DateTime.Now,
                     SharedProfile = model.SharedProfile,
                     LoginName = model.LoginName,
+                    Gender = model.Gender,
                     AvatarContent = avatarcont,
                     AvatarMime = avatarmime
                 });
