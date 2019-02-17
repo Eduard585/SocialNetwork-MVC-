@@ -69,6 +69,7 @@
     <Compile Include="DTO\ImageDTO.cs" />
     <Compile Include="DTO\ImageWrapper.cs" />
     <Compile Include="DTO\LikesDTO.cs" />
+    <Compile Include="DTO\Love.cs" />
     <Compile Include="DTO\PostDTO.cs" />
     <Compile Include="DTO\PostTagsDTO.cs" />
     <Compile Include="DTO\RoleDTO.cs" />

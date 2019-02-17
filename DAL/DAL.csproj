@@ -89,6 +89,9 @@
     <Compile Include="Likes.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Love.cs">
+      <DependentUpon>EntityDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Posts.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
@@ -100,6 +103,9 @@
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Subscribtions.cs">
+      <DependentUpon>EntityDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagrams.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Users.cs">

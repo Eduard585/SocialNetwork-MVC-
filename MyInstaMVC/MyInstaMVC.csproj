@@ -109,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Angular\App.js" />
-    <Content Include="Angular\Controllers\GridController.js" />
     <Content Include="Angular\Controllers\MainController.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -144,6 +143,7 @@
     </Compile>
     <Compile Include="Models\JsonResultResponse.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\LoveModel.cs" />
     <Compile Include="Models\PostModel.cs" />
     <Compile Include="Models\RegistrationModel.cs" />
     <Compile Include="Models\UserProfileModel.cs" />

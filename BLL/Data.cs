@@ -309,5 +309,17 @@ namespace BLL
                 else return false;
             }
         }
+
+        public static List<Love> GetLoves(int qty = 8)
+        {
+            var res = (List<Love>)null;
+
+            using (var ctx = new DAL.InstaDbEntities())
+            {
+                var temp = ctx.Love.Where(x => x.ID >=0);
+                res = temp.OrderByDescending(x => x.Date).Select(AutoMapper.Mapper.Map<Love>).ToList();
+            }
+            return res;
+        }
     }
 }

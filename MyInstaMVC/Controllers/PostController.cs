@@ -80,7 +80,7 @@ namespace MyInstaMVC
                 BLL.Data.CreatePost(model);
 
 
-
+                
 
             }
             catch (DbEntityValidationException ex)
@@ -161,6 +161,7 @@ namespace MyInstaMVC
             var model = new Models.PostModel { FormMode = my ? PostFormMode.my : PostFormMode.all };
             model.Posts = BLL.Data.GetPosts(page, my ? _currentUserId : null,_currentUserId);
             model.NextExist = BLL.Data.GetPosts(page + 1, my ? _currentUserId : null).Any();
+            
             return PartialView("_MorePostView", model);
 
         }
