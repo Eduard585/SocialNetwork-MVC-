@@ -17,6 +17,7 @@ namespace DAL
         public long ID { get; set; }
         public int Number { get; set; }
         public System.DateTime Date { get; set; }
+        public string Gender { get; set; }
     
         public virtual Users Users { get; set; }
     }

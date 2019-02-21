@@ -28,12 +28,23 @@ namespace MyInstaMVC.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult GetLoves()
+        
+        public JsonResult CreateLoves()
         {
-            var model = new Models.LoveModel { };
-            model.Loves = BLL.Data.GetLoves();
-            return View("Index", model);
+            var result = new JsonResultResponse { Success = true };
+            try
+            {
+                var userId = _currentUserId.Value;
+
+                var loveNum = BLL.Data.CreateLove(new BLL.DTO.Love { ID = userId, Date = DateTime.Now});
+                result.Result = loveNum;
+            }
+            catch(Exception ex)
+            {
+                result.Success = false;
+                result.Result = ex.Message;
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

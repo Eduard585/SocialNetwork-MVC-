@@ -78,10 +78,6 @@ namespace MyInstaMVC
                 model.UserId = _currentUserId.Value;
 
                 BLL.Data.CreatePost(model);
-
-
-                
-
             }
             catch (DbEntityValidationException ex)
             {

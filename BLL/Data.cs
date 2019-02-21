@@ -321,5 +321,34 @@ namespace BLL
             }
             return res;
         }
+
+        public static Love CreateLove(Love love)
+        {
+            var number = (int)love.ID * 2;//Генерируем число для того чтобы не делать лишний запрос к базе. Привязываем число к ID
+            //Потом нужно изменить и привязать значение к количеству юзеров
+            try
+            {
+
+
+                using (var ctx = new DAL.InstaDbEntities())
+                {
+                    var gender = ctx.Users.Where(x => x.ID == love.ID).Select(x => x.Gender).FirstOrDefault();
+
+                    var dbLove = AutoMapper.Mapper.Map<DAL.Love>(love);
+                    dbLove.Gender = gender;
+                    dbLove.Number = number;
+
+                    ctx.Love.Add(dbLove);
+                    ctx.SaveChanges();
+                    var retL = AutoMapper.Mapper.Map<DTO.Love>(dbLove);//Требуется доработка. Можно не создавать доп. переменные а записывать все в love
+                    return retL;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

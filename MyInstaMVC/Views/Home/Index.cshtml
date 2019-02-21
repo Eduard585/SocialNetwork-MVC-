@@ -8,27 +8,28 @@
 <script src="~/Angular/App.js"></script>
 
 <body>
-   
     <div ng-app="App" ng-controller="MainController" data-ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Loves))">
+        <button class="btn btn-default" ng-click="CreateLoves()">Добавить</button>
+        
         {{myVar}}
         <table>
             <tr>
                 <th>He</th>
-                <th>She</th>                
+                <th>She</th>
             </tr>
             <tr ng-repeat="l in loves">
                 <td>{{l.ID}}</td>
-                <td>{{l.Number}}</td>            
+                <td>{{l.Number}}</td>
             </tr>
         </table>
 
-       
+
 
 
 
 
     </div>
-    
+
 
 </body>
 

@@ -42,6 +42,7 @@
           <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="Number" Type="int" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Posts">
           <Key>
@@ -421,6 +422,7 @@
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="Insta_DataBaseModel.FK_Love_Users" FromRole="Love" ToRole="Users" />
         </EntityType>
         <EntityType Name="Posts">
@@ -668,6 +670,7 @@
           <EntitySetMapping Name="Love">
             <EntityTypeMapping TypeName="Insta_DataBaseModel.Love">
               <MappingFragment StoreEntitySet="Love">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="ID" ColumnName="ID" />

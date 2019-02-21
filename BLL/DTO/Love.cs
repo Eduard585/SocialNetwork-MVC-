@@ -11,5 +11,6 @@ namespace BLL.DTO
         public long ID { get; set; }
         public int Number { get; set; }
         public DateTime Date { get; set; }
+        public string Gender { get; set; }
     }
 }

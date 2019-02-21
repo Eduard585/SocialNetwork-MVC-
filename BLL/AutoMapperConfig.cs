@@ -20,9 +20,11 @@ namespace BLL
                 .ForMember(x => x.UserNickname, y => y.MapFrom(x => x.Users.NickName))
                 .ForMember(x => x.DateString, y => y.MapFrom(x => x.Date.ToString("dd.MM.yyyy HH:mm")));
                 cfg.CreateMap<DAL.Likes, DTO.LikesDTO>();
+                
                 cfg.CreateMap<DAL.PostTags, DTO.PostTagsDTO>();
                 cfg.CreateMap<DAL.Roles, DTO.RoleDTO>();
                 cfg.CreateMap<DAL.Love, DTO.Love>();
+                
                 cfg.CreateMap<DTO.UserDTO, DAL.Users>();
                 cfg.CreateMap<DTO.PostDTO, DAL.Posts>();
                 cfg.CreateMap<DTO.ImageDTO, DAL.Images>();

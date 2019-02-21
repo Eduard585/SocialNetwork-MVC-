@@ -4,6 +4,5 @@ App.controller('MainController', MainController);
 
 
 
-configFunction.$inject = ['$routeProvider', '$httpProvider'];
 
-App.config(configFunction)
+
