@@ -1,21 +1,28 @@
 ﻿@model MyInstaMVC.Models.LoveModel
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-animate.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-route.min.js"></script>
+<link href="~/Content/LovePage.css" rel="stylesheet" type="text/css" />
 
 <script src="~/Angular/Controllers/MainController.js"></script>
 <script src="~/Angular/App.js"></script>
 
 <body>
     <div ng-app="App" ng-controller="MainController" data-ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Loves))">
-        <button class="btn btn-default" ng-click="CreateLoves()">Добавить</button>
+
+        <div class="row">
+            <div class="loveContainer">
+                <a ng-click="CreateLoves()" class="LoveButton"><i class="fas fa-heart"></i></a>
+            </div>
+        </div>
+
         
-        {{myVar}}
-        <table>
+           
+        
+
+        <br />
+        <table class="table">
             <tr>
-                <th>He</th>
-                <th>She</th>
+                <th>ID</th>
+                <th>Number</th>
             </tr>
             <tr ng-repeat="l in loves">
                 <td>{{l.ID}}</td>

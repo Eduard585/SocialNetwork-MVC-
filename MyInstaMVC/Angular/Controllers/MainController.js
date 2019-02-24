@@ -24,7 +24,7 @@ var MainController = function ($scope, $http) {
     }
    
     
-    $scope.myVar = 2;
+    
 }
 
 MainController.$inject = ['$scope','$http'];

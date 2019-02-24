@@ -324,16 +324,20 @@ namespace BLL
 
         public static Love CreateLove(Love love)
         {
-            var number = (int)love.ID * 2;//Генерируем число для того чтобы не делать лишний запрос к базе. Привязываем число к ID
-            //Потом нужно изменить и привязать значение к количеству юзеров
+                   
+            //Чтобы не генерировать рандомно числа, просто каждый раз к номеру прибавляем единицу. Меньше будет проблем
             try
             {
 
 
                 using (var ctx = new DAL.InstaDbEntities())
                 {
+                    if(ctx.Love.Any(x=>x.ID == love.ID))
+                        throw new Exception($"User:{love.ID} already get loved");
                     var gender = ctx.Users.Where(x => x.ID == love.ID).Select(x => x.Gender).FirstOrDefault();
-
+                    
+                   var number = ctx.Love.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;
+                    number++;
                     var dbLove = AutoMapper.Mapper.Map<DAL.Love>(love);
                     dbLove.Gender = gender;
                     dbLove.Number = number;

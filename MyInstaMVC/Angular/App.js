@@ -1,4 +1,4 @@
-﻿var App = angular.module('App', ['ngRoute']);
+﻿var App = angular.module('App', ['ngAnimate']);
 
 App.controller('MainController', MainController);
 
