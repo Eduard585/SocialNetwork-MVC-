@@ -22,11 +22,29 @@ namespace MyInstaMVC.Controllers
 
             return model;
         }
+
+        private UserProfileModel InitModel(long userId)
+        {
+            var dbUser = BLL.Data.GetUser(userId);
+            var model = new UserProfileModel
+            {
+                User = new UserModel(dbUser)
+            };
+
+            return model;
+        }
         // GET: UserProfile
         public ActionResult Index()
         {
 
             return View(InitModel());
+        }
+
+        [HttpGet]
+        public ActionResult Index(long userId)
+        {
+
+            return View(InitModel(userId));
         }
 
         [HttpGet]

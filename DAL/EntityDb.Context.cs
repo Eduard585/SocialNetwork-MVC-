@@ -35,5 +35,6 @@ namespace DAL
         public virtual DbSet<Subscribtions> Subscribtions { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Chat> Chat { get; set; }
     }
 }

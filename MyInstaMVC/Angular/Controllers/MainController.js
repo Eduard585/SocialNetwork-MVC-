@@ -4,14 +4,19 @@ var MainController = function ($scope, $http) {
     $scope.init = function (loves) {
 
         $scope.loves = loves;
-        
+       
         
     }
 
-    $scope.CreateLoves = function (loves) {
+    $scope.CreateLoves = function () {
         $http.post('/Home/CreateLoves').
             then(function success(response) {
-                $scope.AddLoves(response.data.Result);
+
+                if ($scope.loves.indexOf("3") !== -1) {
+                    console.log("Пара еще не найдена");
+                }
+                
+               $scope.AddLoves(response.data.Result);
                 console.log("Все ок");
             }, function error(response) {
                 console.log("Возникла ошибка");

@@ -3,6 +3,8 @@
     @Html.Raw(Html.Partial("_comTemplate"))
 </script>
 
+<link rel="stylesheet" type="text/css" href="~/Content/PostStyle.css" />
+
 <script>
     var formIsMy = '@(Model.FormMode==MyInstaMVC.Models.PostFormMode.my?1:0)' == '1';
     var currentPage = 0;
@@ -24,13 +26,13 @@
     }
 
     function Create() {
-        homeLoader.show();
 
         $.get("@Url.Action("Create")").done(function (res) {
+            homeLoader.show();
             $("#CreateForm").html(res);
+            homeLoader.hide();
             
         });
-        homeLoader.hide();
     }
 
     function CreateAdmin() {
@@ -73,8 +75,6 @@
                 alert(res.Result);
 
 
-
-
         });
 
 
@@ -104,7 +104,7 @@
         $(document).on("click", ".AddCommentButton", AddCommentButtonClick)
         $(document).on("click", ".SendCommentText", SendCommentTextClick)
         $(document).on("click", ".ViewCommentsButton", ViewCommentsButtonClick)
-        $(document).on("click", ".LikeButton", AddLikeButtonClick)
+        $(document).on("click", ".like_btn", AddLikeButtonClick)
     });
 
     function AddLikeButtonClick(e) {
@@ -114,19 +114,18 @@
         var postId = post.data("post-id");
         $.post('@Url.Action("AddLike")', { postId: postId }).done((res) => {
             if (res.Success) {
-                post.find(".likeDiv").empty();
-                post.find(".likeDiv").append(res.Result)
+                post.find(".like_count").empty();
+                post.find(".like_count").append(res.Result)
             }
         
         })
 
-        if ($(this).is(".White")) {
-            $(this).removeClass("White")
-            $(this).addClass("Red")
+        if ($(this).is(".liked")) {
+            $(this).removeClass("liked")
+            
         }
-        else {
-            $(this).removeClass("Red")
-            $(this).addClass("White")
+        else {            
+            $(this).addClass("liked ")
         }
 
     }
@@ -178,23 +177,6 @@
     }
 
 </script>
-<style>
-
-    .Img_Preview {
-        max-width: 150px;
-        max-height: 150px;
-        border-radius: 15px;
-        cursor: crosshair;
-    }
-
-        .Img_Preview:hover {
-            border: 2px dashed red;
-        }
-
-    .PostDiv {
-        border: 2px blue solid;
-    }
-</style>
 
 @if (Model.ShowAdminControl == true)
 {

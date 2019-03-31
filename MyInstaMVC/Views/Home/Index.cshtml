@@ -14,23 +14,40 @@
             </div>
         </div>
 
-        
-           
-        
+        <input type="text" id="query" ng-model="query" />
+
+
 
         <br />
-        <table class="table">
-            <tr>
-                <th>ID</th>
-                <th>Number</th>
-            </tr>
-            <tr ng-repeat="l in loves">
-                <td>{{l.ID}}</td>
-                <td>{{l.Number}}</td>
-            </tr>
-        </table>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-xs-6">
 
-
+                <table class="table">
+                    <caption>Он</caption>
+                    <tr>
+                        <th>ID</th>
+                        <th>Number</th>
+                    </tr>
+                    <tr ng-repeat="l in loves | filter: {Gender: 'Man'} | orderBy: '-Number'">
+                        <td>{{l.ID}}</td>
+                        <td>{{l.Number}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-6 ">
+                <table class="table">
+                    <caption>Она</caption>
+                    <tr>
+                        <th>ID</th>
+                        <th>Number</th>
+                    </tr>
+                    <tr ng-repeat="l in loves | filter: {Gender: 'Girl'} | orderBy: '-Number'">
+                        <td>{{l.ID}}</td>
+                        <td>{{l.Number}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
 
 

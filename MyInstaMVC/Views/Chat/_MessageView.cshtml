@@ -1,0 +1,18 @@
+﻿@model BLL.DTO.ChatDTO
+
+<div class="row">  
+    <div class="message d-flex">
+        <div class="message-image">
+            <a href="@Url.Action("Index", "UserProfile",new {userId = Model.UserId })">
+                <img class="message-image-img" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.UserId })" title="Avatarka" />
+            </a>
+        </div>
+        <div class="message-text ">
+            <p class="float-left">
+                @Model.Message
+            </p>
+        </div>
+    </div>
+</div>
+
+

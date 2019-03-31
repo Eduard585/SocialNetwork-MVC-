@@ -1,65 +1,81 @@
 ﻿@model BLL.DTO.PostDTO
-<style>
-    .LikeButtonDiv :hover {
-        color: #fb7777;
-    }
 
-    .White{
-        background-color: white;
-    }
+<div class="row">
+    <div class="PostDiv col-lg-12" data-post-id="@Model.Id">
+        <div class="post_div_inner">
+            
+                <div class="profile_container">
+                    <a class="profile_link"><h3>@Model.User.NickName</h3></a>
+                </div>
+                <div class="post_description">
+                    @Model.Description<br />
+                </div>
+            <div class="ImgDiv img_container">
+                @foreach (var image in Model.Images)
+                {
 
-    .Red{
-        background-color: red;
-    }
+                    <div><img src='@Url.Action("GetImage")/@image.Id' class='Img_Preview mx-auto'/></div>
 
-</style>
+                }
+            </div>
+            <hr />
+            
+            <div>
+                @if (Model.PublicateDate.ToString() != null)
+                {
+                    <a href="javascript:void(0);" onclick="PublishPost('@Model.Id', this)">Опубликовать</a>
+                }
+                else
+                {
+                    <text>@Model.PublicateDate.ToString()</text>
+                }
+            </div>
 
-<div class="PostDiv" data-post-id="@Model.Id">
-    <div class="ImgDiv">
-        @foreach (var image in Model.Images)
-        {
+            <div class="post_controls_div d-flex">
+                <div class="like_controls">
+                    @if (Model.IsLiked == false)
+                    {
+                        <a class="like_btn d-flex">
+                            <div class="like_btn_icon"></div>
+                            <div class="like_count">@Model.Likes.Count()</div>
+                        </a>
 
-            <div><img src='@Url.Action("GetImage")/@image.Id' class='Img_Preview' /></div>
+                    }
+                    else
+                    {
+                        <a class="like_btn liked d-flex">
+                            <div class="like_btn_icon"></div>
+                            <div class="like_count">@Model.Likes.Count()</div>
+                        </a>
+                    }
 
-        }
-    </div>
-    <hr />
-    <div>
-        @Model.Description<br />
-    </div>
-    <div>
-        @if (Model.PublicateDate.ToString() != null)
-        {
-            <a href="javascript:void(0);" onclick="PublishPost('@Model.Id', this)">publish</a>
-        }
-        else
-        {
-            <text>@Model.PublicateDate.ToString()</text>
-        }
-    </div>
-    <button class="ViewCommentsButton" data-toogle="view">ViewComments</button>
-    <div class="commentDiv">
-        @Html.Raw(Nustache.Core.Render.StringToString(Html.Partial("_comTemplate").ToString(), new { Comments = Model.Comments.OrderByDescending(x => x.Date).Take(1) }))
-    </div>
-    <div class="AddComentDiv" style="display:none">
-        <textarea class="CommentText"></textarea>
-        <button class="SendCommentText">Send</button>
-    </div>
-    <button class="AddCommentButton">AddComent</button>
 
-    @if (Model.IsLiked == false)
-    {
-        <div class="LikeButtonDiv">
-            <button class="LikeButton White">Like</button>
+                </div>
+
+                <div class="comment_div">
+                    <a class="comment_btn ViewCommentsButton">
+                        <div class="comment_btn_icon"></div>
+                        <div class="comment_btn_count"></div>
+                    </a>
+
+                </div>
+                <div class="commentDiv">
+                    @Html.Raw(Nustache.Core.Render.StringToString(Html.Partial("_comTemplate").ToString(), new { Comments = Model.Comments.OrderByDescending(x => x.Date).Take(1) }))
+                </div>
+
+                <div class="add_comment">
+                    <button class="AddCommentButton">Добавить комментарий</button>
+                </div>
+            </div>
+
         </div>
-    }
-    else
-    {
-        <div class="LikeButtonDiv">
-            <button class="LikeButton Red">Like</button>
+        <div class="row">
+            <div class="col-lg-1">
+                <div class="AddComentDiv" style="display:none">
+                    <textarea class="CommentText"></textarea>
+                    <button class="SendCommentText">Send</button>
+                </div>
+            </div>
         </div>
-    }
-    <div class="likeDiv">
-        <text>@Model.Likes.Count()</text>
     </div>
 </div>

@@ -23,6 +23,7 @@ namespace DAL
             this.Subscribtions = new HashSet<Subscribtions>();
             this.Subscribtions1 = new HashSet<Subscribtions>();
             this.Roles = new HashSet<Roles>();
+            this.Chat = new HashSet<Chat>();
         }
     
         public long ID { get; set; }
@@ -51,5 +52,7 @@ namespace DAL
         public virtual ICollection<Subscribtions> Subscribtions1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Roles> Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Chat> Chat { get; set; }
     }
 }

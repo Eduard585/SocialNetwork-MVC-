@@ -21,7 +21,7 @@ namespace MyInstaMVC
             var model = new Models.PostModel { FormMode = PostFormMode.all };
             model.Posts = BLL.Data.GetPosts(currentUserId: _currentUserId );
             model.NextExist = BLL.Data.GetPosts(1).Any();
-            model.ShowAdminControl = user.IsInRole("Admin");
+            model.ShowAdminControl = user.IsInRole("Admin");            
             return View(model);
         }
 

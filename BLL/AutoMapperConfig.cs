@@ -24,6 +24,7 @@ namespace BLL
                 cfg.CreateMap<DAL.PostTags, DTO.PostTagsDTO>();
                 cfg.CreateMap<DAL.Roles, DTO.RoleDTO>();
                 cfg.CreateMap<DAL.Love, DTO.Love>();
+                cfg.CreateMap<DAL.Chat, DTO.ChatDTO>();
                 
                 cfg.CreateMap<DTO.UserDTO, DAL.Users>();
                 cfg.CreateMap<DTO.PostDTO, DAL.Posts>();
@@ -33,6 +34,7 @@ namespace BLL
                 cfg.CreateMap<DTO.PostTagsDTO, DAL.PostTags>();
                 cfg.CreateMap<DTO.RoleDTO, DAL.Roles>();
                 cfg.CreateMap<DTO.Love, DAL.Love>();
+                cfg.CreateMap<DTO.ChatDTO, DAL.Chat>();
             }
             );
         }

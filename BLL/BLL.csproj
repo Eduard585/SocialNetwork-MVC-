@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AutoMapperConfig.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="DTO\ChatDTO.cs" />
     <Compile Include="DTO\CommentDTO.cs" />
     <Compile Include="DTO\ImageDTO.cs" />
     <Compile Include="DTO\ImageWrapper.cs" />

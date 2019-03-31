@@ -47,7 +47,7 @@ namespace BLL
             }
         }
 
-
+        
         public static UserDTO GetUser(long? id = null, string Login = null)
         {
             if (!id.HasValue && string.IsNullOrEmpty(Login))
@@ -55,26 +55,19 @@ namespace BLL
             try
             {
                 using (var ctx = new DAL.InstaDbEntities() )
-                {
-                    
+                {                    
                     var user = ctx.Users.Where(x => x.ID == id || x.LoginName == Login).Select(AutoMapper.Mapper.Map<DTO.UserDTO>).FirstOrDefault();
-                    ///????????????
-                  //  user.Roles = ctx.Roles.Where(x => x.ID == id).Select(AutoMapper.Mapper.Map<DTO.RoleDTO>).ToList();
+                    
                     if (user != null | user.Roles != null)
                     {
-
-
                         return user;
                     }
-
                     throw new Exception($"Not found User with ID:{id}");
                 }
             }
             catch (Exception ex)
             {
-
                 throw;
-                //return null;
             }
         }
 
@@ -102,6 +95,7 @@ namespace BLL
                     throw new Exception("Error from SetAvatar");
                 user.AvatarContent = avatar.Content;
                 user.AvatarMime = avatar.Mime;
+                ctx.SaveChanges();
             }
 
         }
@@ -198,6 +192,7 @@ namespace BLL
             using (var ctx = new DAL.InstaDbEntities())
             {
                 res = ctx.Posts.Where(x => x.ID == PostId).Select(AutoMapper.Mapper.Map<PostDTO>).FirstOrDefault();
+                res.User = GetUser(res.UserId);
                 if (res == null)
                     throw new Exception("Нет такого поста");
                 
@@ -207,22 +202,25 @@ namespace BLL
 
         public static List<PostDTO> GetPosts(int page = 0, long? userId = null, long? currentUserId = null)//следует убрать второе значение userId и поменять  getPOsts в My
         {
-            var take = 4;
-            var skip = take * page;
-            var res = (List<PostDTO>)null;
+            int take = 4;
+            int skip = take * page;
+            var res = (List<PostDTO>)null;    
+            
             using (var ctx = new DAL.InstaDbEntities())
             {
                 var temp = ctx.Posts.Where(x => !userId.HasValue && x.PublicateDate.HasValue || userId.HasValue && x.UserID == userId.Value);
-               
+                
                 res = temp.OrderByDescending(x => x.PublicateDate).ThenByDescending(x => x.Date).Skip(skip).Take(take).Select(AutoMapper.Mapper.Map<PostDTO>).ToList();
                 for(int i = 0; i<res.Count; i++)
                 {
+                    res[i].User = GetUser(res[i].UserId);
                     if (res[i].Likes.FirstOrDefault(x => x.UserId == currentUserId) != null)
                     {
                         res[i].IsLiked = true;
                     }
                     else res[i].IsLiked = false;
                 }
+                
             }
             return res;
         }
@@ -336,7 +334,7 @@ namespace BLL
                         throw new Exception($"User:{love.ID} already get loved");
                     var gender = ctx.Users.Where(x => x.ID == love.ID).Select(x => x.Gender).FirstOrDefault();
                     
-                   var number = ctx.Love.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;
+                    var number = ctx.Love.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;
                     number++;
                     var dbLove = AutoMapper.Mapper.Map<DAL.Love>(love);
                     dbLove.Gender = gender;
@@ -351,6 +349,32 @@ namespace BLL
             catch(Exception ex)
             {
                 throw;
+            }
+        }
+
+        public static List<ChatDTO> GetChatMessages()
+        {
+            var res = (List<ChatDTO>)null;
+            using(var ctx = new DAL.InstaDbEntities())
+            {
+                var temp = ctx.Chat.Where(x => x.Date != null);
+                res = temp.OrderByDescending(x => x.Date).Select(AutoMapper.Mapper.Map<ChatDTO>).ToList();
+            }
+            int max = res.Count();
+            for (int i = 0;i<max;i++)
+            {
+                res[i].User = GetUser(res[i].UserId);
+            }
+            return res;
+        }
+
+        public static void CreateMessage(ChatDTO chat)
+        {
+            using (var ctx = new DAL.InstaDbEntities())
+            {
+                var dbChat = AutoMapper.Mapper.Map<DAL.Chat>(chat);
+                ctx.Chat.Add(dbChat);
+                ctx.SaveChanges();
             }
         }
 

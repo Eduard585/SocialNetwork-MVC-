@@ -116,7 +116,7 @@ namespace MyInstaMVC.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index","Post");
                     }
                 }
             }

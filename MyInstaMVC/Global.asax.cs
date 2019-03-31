@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using Microsoft.Owin;
+using Owin;
 
 namespace MyInstaMVC
 {
@@ -18,6 +20,7 @@ namespace MyInstaMVC
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BLL.AutoMapperConfig.RegisterMappings();
+            
         }
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)

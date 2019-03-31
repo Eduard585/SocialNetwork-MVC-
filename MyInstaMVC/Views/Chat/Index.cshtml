@@ -1,0 +1,50 @@
+﻿@model MyInstaMVC.Models.ChatModel
+
+@{
+    ViewBag.Title = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="MainWrapper">
+    <div class="container">
+        <input type="text" id="message" />
+        <input type="button" id="sendmessage" value="Send" />
+        <input type="hidden" id="displayname" />
+        <ul id="discussion"></ul>
+    </div>
+
+    @foreach (var message in Model.Chats)
+    {
+        Html.RenderPartial("_MessageView", message);
+    }
+</div>
+<link rel="stylesheet" type="text/css" href="~/Content/ChatStyle.css" />
+
+
+<script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+<script src="~/signalr/hubs"></script>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        var chat = $.connection.chatHub;
+        chat.client.broadcastMessage = function (name, message) {
+            var encodedImg = new Image();
+            encodedImg.src = "@Url.Action("Avatar", new { Id = Model.currentChatUser.Id })"
+            var encodedMsg = $('<div />').text(message).html();
+            $('#discussion').append('<img class="message-image-img" onerror="this.src=@Url.Content("~/Content/Images/MissingImage.jpg")" src="@Url.Action("Avatar",new {Id=Model.currentChatUser.Id})" title="Avatarka" />:&nbsp;&nbsp;' + encodedMsg + '</li>');
+        };
+        $('#displayname').val('@Model.currentChatUser');
+        $('#message').focus();
+        $.connection.hub.start().done(function () {
+            $('#sendmessage').click(function () {
+                chat.server.send($('#displayname').val(), $('#message').val(),@Model.currentChatUser.Id);
+                $('#message').val('').focus();
+            });
+        });
+    });
+
+    $(function () {
+
+    });
+</script>

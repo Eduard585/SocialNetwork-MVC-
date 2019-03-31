@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Хранилище Insta_DataBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="Comments">
           <Key>
             <PropertyRef Name="ID" />
@@ -115,6 +124,18 @@
           <Property Name="AvatarMime" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Gender" Type="nvarchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_Chat_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Comments_Posts">
           <End Role="Posts" Type="Self.Posts" Multiplicity="1" />
           <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
@@ -260,6 +281,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Хранилище Insta_DataBaseModelContainer">
+          <EntitySet Name="Chat" EntityType="Self.Chat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Likes" EntityType="Self.Likes" Schema="dbo" store:Type="Tables" />
@@ -271,6 +293,10 @@
           <EntitySet Name="Subscribtions" EntityType="Self.Subscribtions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Chat_Users" Association="Self.FK_Chat_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Chat" EntitySet="Chat" />
+          </AssociationSet>
           <AssociationSet Name="FK_Comments_Posts" Association="Self.FK_Comments_Posts">
             <End Role="Posts" EntitySet="Posts" />
             <End Role="Comments" EntitySet="Comments" />
@@ -378,6 +404,11 @@
           <AssociationSet Name="RoleMap" Association="Insta_DataBaseModel.RoleMap">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Chat" EntityType="Insta_DataBaseModel.Chat" />
+          <AssociationSet Name="FK_Chat_Users" Association="Insta_DataBaseModel.FK_Chat_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Chat" EntitySet="Chat" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Comments">
@@ -503,6 +534,7 @@
           <NavigationProperty Name="Subscribtions" Relationship="Insta_DataBaseModel.FK_Subscribtions_Users" FromRole="Users" ToRole="Subscribtions" />
           <NavigationProperty Name="Subscribtions1" Relationship="Insta_DataBaseModel.FK_Subscribtions_Users1" FromRole="Users" ToRole="Subscribtions" />
           <NavigationProperty Name="Roles" Relationship="Insta_DataBaseModel.RoleMap" FromRole="Users" ToRole="Roles" />
+          <NavigationProperty Name="Chat" Relationship="Insta_DataBaseModel.FK_Chat_Users" FromRole="Users" ToRole="Chat" />
         </EntityType>
         <Association Name="FK_Comments_Posts">
           <End Type="Insta_DataBaseModel.Posts" Role="Posts" Multiplicity="1" />
@@ -627,6 +659,28 @@
         <Association Name="RoleMap">
           <End Type="Insta_DataBaseModel.Roles" Role="Roles" Multiplicity="*" />
           <End Type="Insta_DataBaseModel.Users" Role="Users" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Message" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Insta_DataBaseModel.FK_Chat_Users" FromRole="Chat" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_Chat_Users">
+          <End Type="Insta_DataBaseModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="Insta_DataBaseModel.Chat" Role="Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -753,6 +807,15 @@
               <ScalarProperty Name="ID" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Chat">
+            <EntityTypeMapping TypeName="Insta_DataBaseModel.Chat">
+              <MappingFragment StoreEntitySet="Chat">
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

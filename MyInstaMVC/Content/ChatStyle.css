@@ -1,0 +1,13 @@
+﻿body {
+}
+
+.message-image-img{
+    max-width:50px;
+    max-height:25px;
+    border-radius: 30%;
+}
+
+.message-text{
+    padding-left:8px;
+}
+
