@@ -15,7 +15,7 @@ namespace MyInstaMVC.Controllers
         public ActionResult Index()
         {
             var dbUser = BLL.Data.GetUser(((CustomPrincipal)User).UserId);
-            //var model = new UserModel(dbUser);
+            //var model = new UserMode l(dbUser);
             var model = new ChatModel();
             //model.Chats = BLL.Data.GetChatMessages();
             model.Chats = BLL.Data.GetChatMessages();
