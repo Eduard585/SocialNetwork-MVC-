@@ -323,7 +323,7 @@ namespace BLL
         public static Love CreateLove(Love love)
         {
                    
-            //Чтобы не генерировать рандомно числа, просто каждый раз к номеру прибавляем единицу. Меньше будет проблем
+            //Чтобы не генерировать рандомно числа, про сто каждый раз к номеру прибавляем единицу. Меньше будет проблем
             try
             {
 
@@ -352,13 +352,15 @@ namespace BLL
             }
         }
 
-        public static List<ChatDTO> GetChatMessages()
+        public static List<ChatDTO> GetChatMessages(int page = 0)
         {
+            int take = 10;
+            int skip = take * page;
             var res = (List<ChatDTO>)null;
             using(var ctx = new DAL.InstaDbEntities())
             {
                 var temp = ctx.Chat.Where(x => x.Date != null);
-                res = temp.OrderByDescending(x => x.Date).Select(AutoMapper.Mapper.Map<ChatDTO>).ToList();
+                res = temp.OrderByDescending(x => x.Date).Skip(skip).Take(take).Select(AutoMapper.Mapper.Map<ChatDTO>).ToList();
             }
             int max = res.Count();
             for (int i = 0;i<max;i++)

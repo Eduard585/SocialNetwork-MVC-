@@ -3,23 +3,23 @@
 <div class="row">
     <div class="PostDiv col-lg-12" data-post-id="@Model.Id">
         <div class="post_div_inner">
-            
-                <div class="profile_container">
-                    <a class="profile_link"><h3>@Model.User.NickName</h3></a>
-                </div>
-                <div class="post_description">
-                    @Model.Description<br />
-                </div>
+
+            <div class="profile_container">
+                <a class="profile_link"><h3>@Model.User.NickName</h3></a>
+            </div>
+            <div class="post_description">
+                @Model.Description<br />
+            </div>
             <div class="ImgDiv img_container">
                 @foreach (var image in Model.Images)
                 {
 
-                    <div><img src='@Url.Action("GetImage")/@image.Id' class='Img_Preview mx-auto'/></div>
+                    <div><img src='@Url.Action("GetImage")/@image.Id' class='Img_Preview mx-auto' /></div>
 
                 }
             </div>
             <hr />
-            
+
             <div>
                 @if (Model.PublicateDate.ToString() != null)
                 {
@@ -59,23 +59,24 @@
                     </a>
 
                 </div>
-                <div class="commentDiv">
-                    @Html.Raw(Nustache.Core.Render.StringToString(Html.Partial("_comTemplate").ToString(), new { Comments = Model.Comments.OrderByDescending(x => x.Date).Take(1) }))
-                </div>
 
+
+            </div>
+            <div class="commentDiv">
+                @Html.Raw(Nustache.Core.Render.StringToString(Html.Partial("_comTemplate").ToString(), new { Comments = Model.Comments.OrderByDescending(x => x.Date).Take(1) }))
+            </div>
+            <div class="add-comment">
                 <div class="add_comment">
                     <button class="AddCommentButton">Добавить комментарий</button>
                 </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-lg-1">
-                <div class="AddComentDiv" style="display:none">
-                    <textarea class="CommentText"></textarea>
-                    <button class="SendCommentText">Send</button>
+                <div class="col-lg-1">
+                    <div class="AddComentDiv" style="display:none">
+                        <textarea class="CommentText"></textarea>
+                        <button class="SendCommentText">Send</button>
+                    </div>
                 </div>
             </div>
         </div>
+        
     </div>
 </div>

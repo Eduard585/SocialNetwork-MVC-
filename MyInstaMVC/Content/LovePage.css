@@ -1,6 +1,6 @@
 ﻿.LoveButton {
     font-size: 64px;
-    color: red;
+    color: red !important;
     cursor: pointer;
     margin: 5px;
     animation: .9s infinite beatHeart;
@@ -38,4 +38,13 @@
     100% {
         transform: scale(1);
     }
+}
+
+.table-he {
+    /*background-color: #b5d1ff;*/
+    background: linear-gradient(to right,#b5d1ff,#f2f7ff);
+}
+.table-she {
+    /*background-color: #ffb296;*/
+    background: linear-gradient(to left,#ffb296,#f2f7ff);
 }
