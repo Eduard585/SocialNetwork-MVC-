@@ -9,7 +9,7 @@
     <div ng-app="App" ng-controller="MainController" data-ng-init="init(@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Loves))">
 
         <div class="row">
-            <div class="loveContainer">
+            <div class="loveContainer mx-auto">
                 <a ng-click="CreateLoves()" class="LoveButton"><i class="fas fa-heart"></i></a>
             </div>
         </div>
@@ -22,26 +22,26 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-xs-6">
 
-                <table class="table">
+                <table class="table table-he">
                     <caption>Он</caption>
                     <tr>
                         <th>ID</th>
                         <th>Number</th>
                     </tr>
-                    <tr ng-repeat="l in loves | filter: {Gender: 'Man'} | orderBy: '-Number'">
+                    <tr ng-repeat="l in manloves |  orderBy: '-Number'">
                         <td>{{l.ID}}</td>
                         <td>{{l.Number}}</td>
                     </tr>
                 </table>
             </div>
             <div class="col-lg-6 col-md-6 col-xs-6 ">
-                <table class="table">
+                <table class="table table-she">
                     <caption>Она</caption>
                     <tr>
                         <th>ID</th>
                         <th>Number</th>
                     </tr>
-                    <tr ng-repeat="l in loves | filter: {Gender: 'Girl'} | orderBy: '-Number'">
+                    <tr ng-repeat="l in girlloves | orderBy: '-Number'">
                         <td>{{l.ID}}</td>
                         <td>{{l.Number}}</td>
                     </tr>

@@ -2,9 +2,20 @@
 var MainController = function ($scope, $http) {
 
     $scope.init = function (loves) {
-
-        $scope.loves = loves;
-       
+        var manArray = loves.filter((subject) => subject.Gender == 'Man');
+        var girlArray = loves.filter((subject) => subject.Gender == 'Girl');
+        var manArrayLength = manArray.length;
+        var girlArrayLength = girlArray.length
+        if (manArrayLength != girlArrayLength) {
+            if (manArrayLength > girlArrayLength) {
+                manArray.splice(0, manArrayLength - girlArrayLength);
+            }
+            else {
+                girlArray.splice(0, girlArrayLength - manArrayLength);
+            }
+        }
+        $scope.manloves = manArray;
+        $scope.girlloves = girlArray;
         
     }
 

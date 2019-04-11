@@ -9,13 +9,14 @@
         <input type="text" id="message" />
         <input type="button" id="sendmessage" value="Send" />
         <input type="hidden" id="displayname" />
-        <ul id="discussion"></ul>
-    </div>
 
-    @foreach (var message in Model.Chats)
-    {
-        Html.RenderPartial("_MessageView", message);
-    }
+    </div>
+    <div id="message-container">
+        @foreach (var message in Model.Chats)
+        {
+            Html.RenderPartial("_MessageView", message);
+        }
+    </div>
 </div>
 <link rel="stylesheet" type="text/css" href="~/Content/ChatStyle.css" />
 
@@ -26,16 +27,21 @@
 
 
 <script type="text/javascript">
+    
     $(function () {
         var chat = $.connection.chatHub;
         chat.client.broadcastMessage = function (name, message) {
             var encodedImg = new Image();
             encodedImg.src = "@Url.Action("Avatar", new { Id = Model.currentChatUser.Id })"
             var encodedMsg = $('<div />').text(message).html();
-            $('#discussion').append('<img class="message-image-img" onerror="this.src=@Url.Content("~/Content/Images/MissingImage.jpg")" src="@Url.Action("Avatar",new {Id=Model.currentChatUser.Id})" title="Avatarka" />:&nbsp;&nbsp;' + encodedMsg + '</li>');
+            var template = $('#message-template').html();
+            $('#message-container').prepend(template);
+            $("p:first").html(encodedMsg);
         };
+
         $('#displayname').val('@Model.currentChatUser');
         $('#message').focus();
+
         $.connection.hub.start().done(function () {
             $('#sendmessage').click(function () {
                 chat.server.send($('#displayname').val(), $('#message').val(),@Model.currentChatUser.Id);
@@ -44,7 +50,21 @@
         });
     });
 
-    $(function () {
-
-    });
+   
+</script>
+<script id="message-template" type="text/x-custom-template">
+    <div class="row">
+        <div class="message d-flex">
+            <div class="message-image">
+                <a href="@Url.Action("Index", "UserProfile",new {userId = Model.currentChatUser.Id })">
+                    <img class="message-image-img" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.currentChatUser.Id })" title="Avatarka" />
+                </a>
+            </div>
+            <div class="message-text ">
+                <p class="float-left">
+                    
+                </p>
+            </div>
+        </div>
+    </div>
 </script>

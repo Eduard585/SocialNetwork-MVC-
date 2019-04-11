@@ -166,13 +166,13 @@
                 post.find(".commentDiv").html(RenderCommentHtml(res))
             }).always();
              $(this).data("toogle","hide");
-            $(this).text("HideComments");
+            
         }
         else {
             var lastComment = post.find(".commentDiv :last-child.comm");
             post.find(".commentDiv").html(lastComment);
             $(this).data("toogle", "view");
-            $(this).text("ViewComment");
+            
          }
     }
 
