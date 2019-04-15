@@ -47,6 +47,38 @@ namespace BLL
             }
         }
 
+        public static long UpdateUser(UserDTO user)
+        {
+            try
+            {
+                using (var ctx = new DAL.InstaDbEntities())
+                {
+                    var dbUser = ctx.Users.FirstOrDefault(x => x.ID == user.ID) ?? ctx.Users.Add(new DAL.Users());
+
+                    if (ctx.Users.Any(x => x.LoginName == user.LoginName && x.ID != dbUser.ID))
+                        throw new Exception($"User with loginName :{user.LoginName} exist");
+
+                    dbUser.BirthDate = user.BirthDate;
+                    dbUser.Description = user.Description;
+                    dbUser.LoginName = user.LoginName;
+                    dbUser.NickName = user.NickName;
+                    dbUser.PasswordHash = user.PasswordHash;
+                    dbUser.RegDate = user.RegDate;
+                    dbUser.Salt = user.Salt;
+                    dbUser.SharedProfile = user.SharedProfile;
+                    dbUser.Gender = user.Gender;
+                                     
+                    ctx.SaveChanges();
+                    return dbUser.ID;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+
+            }
+        }
+
         
         public static UserDTO GetUser(long? id = null, string Login = null)
         {
@@ -66,6 +98,34 @@ namespace BLL
                 }
             }
             catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static IEnumerable<UserDTO> GetUsers(List<long> idArray)
+        {
+            if (idArray.Count() == 0)
+                return null;
+            try
+            {
+                using (var ctx = new DAL.InstaDbEntities())
+                {
+                    List<UserDTO> userList = null; 
+                    var dbuserList = from u in ctx.Users
+                                   where idArray.Contains(u.ID)
+                                   select u;
+                    if (dbuserList.Count() != 0)
+                    {
+                        AutoMapper.Mapper.Map(userList, dbuserList);
+                        return userList;
+                    }
+                    else return null;
+
+
+                }
+            }
+            catch(Exception ex)
             {
                 throw;
             }
@@ -314,7 +374,7 @@ namespace BLL
 
             using (var ctx = new DAL.InstaDbEntities())
             {
-                var temp = ctx.Love.Where(x => x.ID >=0);
+                var temp = ctx.Loves.Where(x => x.ID >=0);
                 res = temp.OrderByDescending(x => x.Date).Select(AutoMapper.Mapper.Map<Love>).ToList();
             }
             return res;
@@ -330,17 +390,17 @@ namespace BLL
 
                 using (var ctx = new DAL.InstaDbEntities())
                 {
-                    if(ctx.Love.Any(x=>x.ID == love.ID))
+                    if(ctx.Loves.Any(x=>x.ID == love.ID))
                         throw new Exception($"User:{love.ID} already get loved");
                     var gender = ctx.Users.Where(x => x.ID == love.ID).Select(x => x.Gender).FirstOrDefault();
                     
-                    var number = ctx.Love.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;
+                    var number = ctx.Loves.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;
                     number++;
-                    var dbLove = AutoMapper.Mapper.Map<DAL.Love>(love);
+                    var dbLove = AutoMapper.Mapper.Map<DAL.Loves>(love);
                     dbLove.Gender = gender;
                     dbLove.Number = number;
 
-                    ctx.Love.Add(dbLove);
+                    ctx.Loves.Add(dbLove);
                     ctx.SaveChanges();
                     var retL = AutoMapper.Mapper.Map<DTO.Love>(dbLove);//Требуется доработка. Можно не создавать доп. переменные а записывать все в love
                     return retL;
@@ -354,19 +414,25 @@ namespace BLL
 
         public static List<ChatDTO> GetChatMessages(int page = 0)
         {
-            int take = 10;
+            int take = 15;
             int skip = take * page;
+            List<long> idList = new List<long>();
             var res = (List<ChatDTO>)null;
             using(var ctx = new DAL.InstaDbEntities())
             {
                 var temp = ctx.Chat.Where(x => x.Date != null);
                 res = temp.OrderByDescending(x => x.Date).Skip(skip).Take(take).Select(AutoMapper.Mapper.Map<ChatDTO>).ToList();
             }
-            int max = res.Count();
-            for (int i = 0;i<max;i++)
-            {
-                res[i].User = GetUser(res[i].UserId);
-            }
+            //int max = res.Count();
+            //for (int i = 0;i<max;i++)
+            //{
+            //    res[i].User = GetUser(res[i].UserId);
+            //}
+            //foreach(var u in res)
+            //{
+            //    idList.Add(u.UserId);
+            //}
+            //GetUsers(idList);
             return res;
         }
 

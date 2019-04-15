@@ -1,10 +1,12 @@
 ﻿using MyInstaMVC.Models;
-using MyInstaMVC.CustomAuth;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity.Validation;
+using MyInstaMVC.CustomAuth;
 
 namespace MyInstaMVC.Controllers
 {
@@ -19,16 +21,20 @@ namespace MyInstaMVC.Controllers
             var model = new ChatModel();
             //model.Chats = BLL.Data.GetChatMessages();
             model.Chats = BLL.Data.GetChatMessages();
-            model.currentChatUser = new UserModel(dbUser);
+            model.currentChatUser = ((CustomPrincipal)User).UserId;
             return View(model);
         }
 
-        public ActionResult Avatar(long Id)
+       
+
+        [HttpGet]        
+        public JsonResult GetChatMessages(int currentPage)
         {
-            var avatar = BLL.Data.GetAvatar(Id);
-            if (avatar == null)
-                return HttpNotFound();
-            return File(avatar.Content, avatar.Mime);
+            var model = new ChatModel();
+
+            model.Chats = BLL.Data.GetChatMessages(currentPage);
+
+            return Json(new { model.Chats } , JsonRequestBehavior.AllowGet);
         }
 
     }

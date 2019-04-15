@@ -12,13 +12,11 @@ namespace DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class Love
+    public partial class Loves
     {
         public long ID { get; set; }
         public int Number { get; set; }
         public System.DateTime Date { get; set; }
         public string Gender { get; set; }
-    
-        public virtual Users Users { get; set; }
     }
 }

@@ -27,14 +27,34 @@
 <body>
     <div class="navbar navbar-inverse fixed-top MainNavBar">
         <div class="container">
-            <div class="navbar-header mx-auto">
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Логин", "Login", "User", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Регистрация", "Registration", "User", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Мой профиль", "EditProfile", "UserProfile", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Лента", "Index", "Post", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Мои посты", "Index", "Post/my", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Общая комната", "Index", "Chat", new { area = "" }, new { @class = "navbar-brand" })
+            <div class="navbar-header mx-auto d-flex">
+                <div class="home-page">
+                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                @*@Html.ActionLink("Логин", "Login", "User", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Регистрация", "Registration", "User", new { area = "" }, new { @class = "navbar-brand" })*@
+                <div class="my-profile">
+                    @Html.ActionLink("Мой профиль", "EditProfile", "UserProfile", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="feed">
+                    @Html.ActionLink("Лента", "Index", "Post", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="my-posts">
+                    @Html.ActionLink("Мои посты", "Index", "Post/my", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="chat-room">
+                    @Html.ActionLink("Общая комната", "Index", "Chat", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                @*@Url.Action("Index","UserProfile", new { userId = 2 })*@
+                <div class="user-profiling">
+                    <a href='@Url.Action("Index","UserProfile")'>
+                        <img src='@Url.Action("Avatar","User")' />
+                    </a>
+                    <a href='@Url.Action("Index","UserProfile")'>
+                        @Url.Action("GetUserNickName","UserProfile")
+                    </a>
+                </div>
+                
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav"></ul>

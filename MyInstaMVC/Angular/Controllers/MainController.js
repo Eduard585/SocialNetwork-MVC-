@@ -1,4 +1,4 @@
-﻿
+﻿//Логику Сортировки мужчин и женщин следует переделать и сделать более надежной
 var MainController = function ($scope, $http) {
 
     $scope.init = function (loves) {
@@ -16,15 +16,18 @@ var MainController = function ($scope, $http) {
         }
         $scope.manloves = manArray;
         $scope.girlloves = girlArray;
-        
+        $scope.loves = loves;
     }
+
+    
 
     $scope.CreateLoves = function () {
         $http.post('/Home/CreateLoves').
             then(function success(response) {
 
-                if ($scope.loves.indexOf("3") !== -1) {
+                if ($scope.loves == 'undefined' || $scope.loves.indexOf("3") !== -1) {
                     console.log("Пара еще не найдена");
+                    return;
                 }
                 
                $scope.AddLoves(response.data.Result);
@@ -37,6 +40,12 @@ var MainController = function ($scope, $http) {
 
     $scope.AddLoves = function (data) {
         $scope.loves.push(data);
+        if (data.Gender == "Girl") {
+            $scope.girlloves.push(data);
+        }
+        else {
+            $scope.manloves.push(data);
+        }
     }
    
     

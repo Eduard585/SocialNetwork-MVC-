@@ -4,7 +4,7 @@
     ViewBag.Title = "Chat";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="MainWrapper">
+<div class="MainWrapper" id="ChatMainWrapper">
     <div class="container">
         <input type="text" id="message" />
         <input type="button" id="sendmessage" value="Send" />
@@ -16,8 +16,10 @@
         {
             Html.RenderPartial("_MessageView", message);
         }
-    </div>
+    </div>   
+    <button onclick="getMoreMessages()">Конец страницы </button>
 </div>
+
 <link rel="stylesheet" type="text/css" href="~/Content/ChatStyle.css" />
 
 
@@ -27,12 +29,14 @@
 
 
 <script type="text/javascript">
-    
+    var currentPage = 0;
+        var messageLeft = @Model.Chats.Count() - 10;
     $(function () {
+
         var chat = $.connection.chatHub;
         chat.client.broadcastMessage = function (name, message) {
             var encodedImg = new Image();
-            encodedImg.src = "@Url.Action("Avatar", new { Id = Model.currentChatUser.Id })"
+            encodedImg.src = "@Url.Action("Avatar","User", new { Id = Model.currentChatUser })"
             var encodedMsg = $('<div />').text(message).html();
             var template = $('#message-template').html();
             $('#message-container').prepend(template);
@@ -44,20 +48,46 @@
 
         $.connection.hub.start().done(function () {
             $('#sendmessage').click(function () {
-                chat.server.send($('#displayname').val(), $('#message').val(),@Model.currentChatUser.Id);
+                if ($('#message').val() != "") {
+                chat.server.send($('#displayname').val(), $('#message').val(),@Model.currentChatUser);
                 $('#message').val('').focus();
+                }
             });
         });
+
     });
 
-   
+
+     function getMoreMessages() {
+        currentPage += 1;
+        messageLeft -= 10;
+        $.get('@Url.Action("/GetChatMessages")', { currentPage: currentPage }).done(function(res) {
+            $('#message-container').append(RenderMessages(res));
+            }).always();
+    }
+
+        function RenderMessages(data) {
+            var temp = $('#message-template1').html();
+            var template = Hogan.compile(temp);
+            return template.render(data);
+        }
+
+        window.onscroll = function () {
+            var scroll = $(window).scrollTop();
+            if ((scroll * 100 / 495 * currentPage) > 30)
+            {
+                getMoreMessages();
+            }
+        }
+
 </script>
+
 <script id="message-template" type="text/x-custom-template">
     <div class="row">
         <div class="message d-flex">
             <div class="message-image">
-                <a href="@Url.Action("Index", "UserProfile",new {userId = Model.currentChatUser.Id })">
-                    <img class="message-image-img" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.currentChatUser.Id })" title="Avatarka" />
+                <a href="@Url.Action("Index", "UserProfile",new {userId = Model.currentChatUser })">
+                    <img class="message-image-img" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar","User",new {Id=Model.currentChatUser})" title="Avatarka" />
                 </a>
             </div>
             <div class="message-text ">
@@ -67,4 +97,8 @@
             </div>
         </div>
     </div>
+</script>
+
+<script type="text/template" id="message-template1">
+@Html.Raw(Html.Partial("_MessageView1"))
 </script>

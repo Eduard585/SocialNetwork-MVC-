@@ -37,3 +37,12 @@ textarea {
     color: #F6F9FF;
 }
 
+.user-profiling img{
+    max-height:40px;
+    max-width:80px;
+    border-radius:5px;
+}
+
+.user-profiling{
+    padding-left:400px;
+}

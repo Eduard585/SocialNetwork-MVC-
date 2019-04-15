@@ -8,6 +8,6 @@ namespace MyInstaMVC.Models
     public class ChatModel
     {
         public List<BLL.DTO.ChatDTO> Chats { get; set; }
-        public UserModel currentChatUser;
+        public long currentChatUser;
     }
 }

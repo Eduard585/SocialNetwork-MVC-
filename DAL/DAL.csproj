@@ -92,7 +92,7 @@
     <Compile Include="Likes.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Love.cs">
+    <Compile Include="Loves.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Posts.cs">

@@ -133,6 +133,15 @@ namespace MyInstaMVC.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "User", null);
         }
+
+        public ActionResult Avatar(long Id = 0)
+        {
+            if (Id == 0) Id = ((CustomPrincipal)User).UserId;           
+            var avatar = BLL.Data.GetAvatar(Id);
+            if (avatar == null)
+                return HttpNotFound();
+            return File(avatar.Content, avatar.Mime);
+        }
     }
     [CustomAuthorize(Roles = "Admin")]
     public class AdminController : Controller

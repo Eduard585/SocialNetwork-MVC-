@@ -47,20 +47,7 @@ namespace MyInstaMVC.CustomAuth
 
                 return userRoles.ToArray();
             }
-           /* using (var ctx = new DAL.InstaDbEntities())
-            {
-                var selectedUser = (from us in ctx.Users
-                                    where string.Compare(us.LoginName, loginname, StringComparison.OrdinalIgnoreCase) == 0
-                                    select us).FirstOrDefault();
-
-                if (selectedUser != null)
-                {
-                    var roles = ctx.    .Where(p => p.UserId == selectedUser.ID);
-                    userRoles = new[] { roles.Select(r => r.RoleId).ToString() };
-                }
-
-                return userRoles.ToArray();
-            }*/
+           
 
 
         }

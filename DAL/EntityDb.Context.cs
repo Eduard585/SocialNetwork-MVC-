@@ -25,16 +25,16 @@ namespace DAL
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Chat> Chat { get; set; }
         public virtual DbSet<Comments> Comments { get; set; }
         public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<Likes> Likes { get; set; }
-        public virtual DbSet<Love> Love { get; set; }
+        public virtual DbSet<Loves> Loves { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<PostTags> PostTags { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Subscribtions> Subscribtions { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Chat> Chat { get; set; }
     }
 }

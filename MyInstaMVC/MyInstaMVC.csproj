@@ -200,6 +200,7 @@
     <Content Include="Views\Post\CreateAdmin.cshtml" />
     <Content Include="Views\Chat\Index.cshtml" />
     <Content Include="Views\Chat\_MessageView.cshtml" />
+    <Content Include="Views\Chat\_MessageView1.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

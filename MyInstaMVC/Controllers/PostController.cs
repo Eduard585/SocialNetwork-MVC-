@@ -161,12 +161,13 @@ namespace MyInstaMVC
             return PartialView("_MorePostView", model);
 
         }
+        [HttpGet]
         public PartialViewResult GetPost(long id)
         {
             var model = BLL.Data.GetPostById(id);
             return PartialView("_PostView", model);
         }
-
+        [HttpGet]
         public JsonResult GetComments(long id)
         {
             var model = BLL.Data.GetPostById(id);
@@ -174,7 +175,7 @@ namespace MyInstaMVC
             
         }
 
-        [HttpPost]
+        [HttpPut]      
         public JsonResult AddComment(long postId, string commentText)
         {
             var result = new JsonResultResponse { Success = true };
