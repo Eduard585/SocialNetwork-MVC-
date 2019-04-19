@@ -9,10 +9,10 @@ namespace MyInstaMVC.signalr.hubs
 {
     public class ChatHub : Hub
     {
-        public void Send(long userId,string message)
+        public void Send(string name, string message,long userId)
         {
             // Call the broadcastMessage method to update clients.
-            Clients.All.broadcastMessage(userId,message);
+            Clients.All.broadcastMessage(name, message,userId);
             var chat = new ChatDTO();
             chat.UserId = userId;
             chat.Message = message;

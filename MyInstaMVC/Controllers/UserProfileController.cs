@@ -34,12 +34,12 @@ namespace MyInstaMVC.Controllers
             return model;
         }
         // GET: UserProfile
-        public ActionResult MyProfile()
+        public ActionResult Index()
         {
-            var userId = ((CustomPrincipal)User).UserId;
-            return View("Index",InitModel(userId));
+
+            return View(InitModel());
         }
-        
+
         [HttpGet]
         public ActionResult Index(long userId)
         {

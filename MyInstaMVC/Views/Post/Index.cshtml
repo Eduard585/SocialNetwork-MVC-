@@ -12,7 +12,7 @@
         $("#CreateForm").html("");
     }
 
-
+   
 
     function NextPage() {
         var nextPage = currentPage +1;
@@ -31,7 +31,7 @@
             homeLoader.show();
             $("#CreateForm").html(res);
             homeLoader.hide();
-
+            
         });
     }
 
@@ -47,11 +47,11 @@
         var $form = $(selector);
         const unindexedArray = $form.find(':input').serializeArray();
         const indexedArray = {};
-
+        
         $.map(unindexedArray, function (n) {
-
+            
             indexedArray[n.name] = n.value.trim();
-
+            
         });
 
         return indexedArray;
@@ -80,7 +80,7 @@
 
     }
 
-
+ 
 
     function ExistInit(a) {
         if (a == '0') {
@@ -105,7 +105,6 @@
         $(document).on("click", ".SendCommentText", SendCommentTextClick)
         $(document).on("click", ".ViewCommentsButton", ViewCommentsButtonClick)
         $(document).on("click", ".like_btn", AddLikeButtonClick)
-        $(document).on("click", "DeletePostButton", DeletePostButtonClick)
     });
 
     function AddLikeButtonClick(e) {
@@ -118,20 +117,20 @@
                 post.find(".like_count").empty();
                 post.find(".like_count").append(res.Result)
             }
-
+        
         })
 
         if ($(this).is(".liked")) {
             $(this).removeClass("liked")
-
+            
         }
-        else {
+        else {            
             $(this).addClass("liked ")
         }
 
     }
 
-
+   
 
      function AddCommentButtonClick(e) {
         e.preventDefault();
@@ -160,26 +159,22 @@
      function ViewCommentsButtonClick(e) {
         e.preventDefault();
         var post = $(this).parents(".PostDiv");
-         if ($(this).data("toogle") == "hide") {
-             var lastComment = post.find(".commentDiv :last-child.comm");
-             post.find(".commentDiv").html(lastComment);
-             $(this).data("toogle", "view");
+         if ($(this).data("toogle") == "view") {
 
-
-        }
-        else {           
             var postId = post.data("post-id");
             $.get('@Url.Action("GetComments")/' + postId).done((res) => {
                 post.find(".commentDiv").html(RenderCommentHtml(res))
             }).always();
              $(this).data("toogle","hide");
-
+            
+        }
+        else {
+            var lastComment = post.find(".commentDiv :last-child.comm");
+            post.find(".commentDiv").html(lastComment);
+            $(this).data("toogle", "view");
+            
          }
     }
-
-     function DeletePostButtonClick(e) {
-         //Показать модальное окно удаления, удалить
-     }
 
 </script>
 
@@ -194,23 +189,12 @@
 <div id="CreateForm">
 </div>
 <div id="MainContainer">
-    @if(Model.ShowAdminControl == true)
+
+    @foreach (var post in Model.Posts)
     {
-        foreach (var post in Model.Posts)
-        {
-            Html.RenderPartial("_PostViewAdmin", post);
-
-        }
+        Html.RenderPartial("_PostView", post);
+        
     }
-    else
-    {
-        foreach (var post in Model.Posts)
-        {
-            Html.RenderPartial("_PostView", post);
-
-        }
-    }
-
 </div>
 @if (Model.NextExist)
 {
