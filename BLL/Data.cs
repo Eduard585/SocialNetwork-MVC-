@@ -391,7 +391,7 @@ namespace BLL
                 using (var ctx = new DAL.InstaDbEntities())
                 {
                     if(ctx.Loves.Any(x=>x.ID == love.ID))
-                        throw new Exception($"User:{love.ID} already get loved");
+                        throw new Exception($"Вы уже получили свою валентинку!");
                     var gender = ctx.Users.Where(x => x.ID == love.ID).Select(x => x.Gender).FirstOrDefault();
                     
                     var number = ctx.Loves.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;

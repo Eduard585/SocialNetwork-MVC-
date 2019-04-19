@@ -11,7 +11,7 @@ using MyInstaMVC.CustomAuth;
 namespace MyInstaMVC.Controllers
 {
     
-
+    [Authorize]
     public class HomeController: Controller
     {
         private long? _currentUserId { get { return ((CustomAuth.CustomPrincipal)User)?.UserId; } }
@@ -37,7 +37,8 @@ namespace MyInstaMVC.Controllers
                 var userId = _currentUserId.Value;
 
                 var loveNum = BLL.Data.CreateLove(new BLL.DTO.Love { ID = userId, Date = DateTime.Now});
-                result.Result = loveNum;
+                result.Result = "Ваша пара еще не найдена!";
+
             }
             catch(Exception ex)
             {

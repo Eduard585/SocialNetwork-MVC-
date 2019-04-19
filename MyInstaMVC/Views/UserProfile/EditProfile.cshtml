@@ -4,6 +4,11 @@
     ViewBag.Title = "EditProfile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
+
+
+
 <div class="MainWrapper">
     <h2>EditProfile</h2>
 
@@ -12,8 +17,14 @@
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <div class="form-group">
-                <img class="avatar-image-img" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.Id })" title="Avatarka" />
+            <div class="form-group" style="max-width:500px">
+                @*<img id="avatar-img" class="avatar-image-img" style="width:250px" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.Id })" title="Avatarka" />*@
+                @*<img id="avatar-img" style="width:250px" src="~/Content/Images/MissingImage.jpg" />*@
+                <img id="avatar-img" class="avatar-image-img" style="width:100%" src="@Url.Action("Avatar",new {Id=Model.Id })" title="Avatarka" />
+
+
+
+
             </div>
 
             <h4>UserModel</h4>
@@ -67,10 +78,43 @@
                     <input type="submit" value="Save" class="btn btn-default" />
                 </div>
             </div>
+            <div class="cropper-container"></div>
         </div>
     }
-
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
 </div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.1/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.1/cropper.min.js"></script>
+<script src="~/Scripts/jquery-cropper.js"></script>
+
+<script>
+    var $image = $('#avatar-img');
+
+    $image.cropper({
+        aspectRatio: 16 / 9,
+        crop: function (event) {
+            console.log(event.detail.x);
+            console.log(event.detail.y);
+            console.log(event.detail.width);
+            console.log(event.detail.height);
+            console.log(event.detail.rotate);
+            console.log(event.detail.scaleX);
+            console.log(event.detail.scaleY);
+        }
+    });
+
+    // Get the Cropper.js instance after initialized
+    var cropper = $image.data('cropper');
+</script>
+<style>
+    .cropper-crop-box, .cropper-view-box {
+        border-radius: 90%;
+    }
+
+    .cropper-view-box {
+        box-shadow: 0 0 0 1px #39f;
+        outline: 0;
+    }
+</style>
