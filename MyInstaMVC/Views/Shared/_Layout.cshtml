@@ -34,7 +34,7 @@
                 @*@Html.ActionLink("Логин", "Login", "User", new { area = "" }, new { @class = "navbar-brand" })
                 @Html.ActionLink("Регистрация", "Registration", "User", new { area = "" }, new { @class = "navbar-brand" })*@
                 <div class="my-profile">
-                    @Html.ActionLink("Мой профиль", "EditProfile", "UserProfile", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Мой профиль", "MyProfile", "UserProfile", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
                 <div class="feed">
                     @Html.ActionLink("Лента", "Index", "Post", new { area = "" }, new { @class = "navbar-brand" })
@@ -46,14 +46,14 @@
                     @Html.ActionLink("Общая комната", "Index", "Chat", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
                 @*@Url.Action("Index","UserProfile", new { userId = 2 })*@
-                <div class="user-profiling">
+                @*<div class="user-profiling">
                     <a href='@Url.Action("Index","UserProfile")'>
                         <img src='@Url.Action("Avatar","User")' />
                     </a>
                     <a href='@Url.Action("Index","UserProfile")'>
                         @Url.Action("GetUserNickName","UserProfile")
                     </a>
-                </div>
+                </div>*@
                 
             </div>
             <div class="navbar-collapse collapse">
