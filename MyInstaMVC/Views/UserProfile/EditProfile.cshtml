@@ -5,71 +5,121 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>EditProfile</h2>
 
-@using (Html.BeginForm("EditProfile", "UserProfile", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            <img class="control-label col-md-2" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.Id })" title="Avatarka" />
-        </div>
 
-        <h4>UserModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.LoginName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.LoginName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LoginName, "", new { @class = "text-danger" })
+<div class="MainWrapper">
+    <h2>EditProfile</h2>
+
+    @using (Html.BeginForm("EditProfile", "UserProfile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <div class="form-group avatar-edit" style="max-width:500px">
+                @*<img id="avatar-img" class="avatar-image-img" style="width:250px" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.Id })" title="Avatarka" />*@
+                @*<img id="avatar-img" style="width:250px" src="~/Content/Images/MissingImage.jpg" />*@
+                <img id="avatar-img" class="avatar-image-img" style="width:100%" src="@Url.Action("Avatar",new {Id=Model.Id })" title="Avatarka"/>
             </div>
-        </div>
+            <button type="button" class="btn btn-success" onclick="cropImage()">
+                
+            </button>
+            
+            <h4>UserModel</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.NickName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.NickName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NickName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.SharedProfile, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.SharedProfile)
-                    @Html.ValidationMessageFor(model => model.SharedProfile, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.LoginName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.LoginName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LoginName, "", new { @class = "text-danger" })
                 </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.Label("AvatarImage", "Avatarka", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="AvatarImage" id="AvatarImage" class="form-control" accept=".jpg,.png,.gif" />
+            <div class="form-group">
+                @Html.LabelFor(model => model.NickName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NickName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NickName, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-    </div>
-}
 
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>   
+            <div class="form-group">
+                @Html.LabelFor(model => model.SharedProfile, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.SharedProfile)
+                        @Html.ValidationMessageFor(model => model.SharedProfile, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("AvatarImage", "Avatarka", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="file" name="AvatarImage" id="EditAvatarImage" onchange="PreviewImage()" class="form-control" accept=".jpg,.png,.gif" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-success" />
+                </div>
+            </div>
+            <div class="cropper-container"></div>
+        </div>
+    }
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.1/cropper.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.1/cropper.min.js"></script>
+<script src="~/Scripts/jquery-cropper.js"></script>
+
+<script>
+    
+        var $image = $('#avatar-img');
+
+        $image.cropper({
+            aspectRatio: 1 / 1,
+        });
+
+        function cropImage() {
+            var canvas = $image.cropper('getCroppedCanvas', { width: 240, height: 180 });
+            var canvaURL = canvas.toDataURL('image/jpeg');
+            $('.avatar-edit').append($('<img>').attr('src', canvaURL));
+        }
+
+        function PreviewImage() {
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById("EditAvatarImage").files[0]);            
+            oFReader.onload = function (oFREvent) {                
+                $image.cropper('replace', oFREvent.target.result)
+            };
+            
+        };
+
+        
+    
+</script>
+<style>
+    .cropper-crop-box, .cropper-view-box {
+        border-radius: 50%;
+    }
+
+    .cropper-view-box {
+        box-shadow: 0 0 0 1px #39f;
+        outline: 0;
+    }
+</style>

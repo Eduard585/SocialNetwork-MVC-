@@ -3,6 +3,8 @@
     @Html.Raw(Html.Partial("_comTemplate"))
 </script>
 
+<link rel="stylesheet" type="text/css" href="~/Content/PostStyle.css" />
+
 <script>
     var formIsMy = '@(Model.FormMode==MyInstaMVC.Models.PostFormMode.my?1:0)' == '1';
     var currentPage = 0;
@@ -10,7 +12,7 @@
         $("#CreateForm").html("");
     }
 
-   
+
 
     function NextPage() {
         var nextPage = currentPage +1;
@@ -19,18 +21,17 @@
 
             $("#MainContainer").append(res);
             currentPage = nextPage;
-        });
-        createSlick();
+        });       
     }
 
     function Create() {
-        homeLoader.show();
 
         $.get("@Url.Action("Create")").done(function (res) {
+            homeLoader.show();
             $("#CreateForm").html(res);
-            
+            homeLoader.hide();
+
         });
-        homeLoader.hide();
     }
 
     function CreateAdmin() {
@@ -45,11 +46,11 @@
         var $form = $(selector);
         const unindexedArray = $form.find(':input').serializeArray();
         const indexedArray = {};
-        
+
         $.map(unindexedArray, function (n) {
-            
+
             indexedArray[n.name] = n.value.trim();
-            
+
         });
 
         return indexedArray;
@@ -73,16 +74,12 @@
                 alert(res.Result);
 
 
-
-
         });
 
 
     }
 
-    function LikeClick(elem) {
-       
-    }
+
 
     function ExistInit(a) {
         if (a == '0') {
@@ -106,7 +103,8 @@
         $(document).on("click", ".AddCommentButton", AddCommentButtonClick)
         $(document).on("click", ".SendCommentText", SendCommentTextClick)
         $(document).on("click", ".ViewCommentsButton", ViewCommentsButtonClick)
-        $(document).on("click", ".LikeButton", AddLikeButtonClick)
+        $(document).on("click", ".like_btn", AddLikeButtonClick)
+        $(document).on("click", "DeletePostButton", DeletePostButtonClick)
     });
 
     function AddLikeButtonClick(e) {
@@ -116,24 +114,23 @@
         var postId = post.data("post-id");
         $.post('@Url.Action("AddLike")', { postId: postId }).done((res) => {
             if (res.Success) {
-                post.find(".likeDiv").empty();
-                post.find(".likeDiv").append(res.Result)
+                post.find(".like_count").empty();
+                post.find(".like_count").append(res.Result)
             }
-        
+
         })
 
-        if ($(this).is(".White")) {
-            $(this).removeClass("White")
-            $(this).addClass("Red")
+        if ($(this).is(".liked")) {
+            $(this).removeClass("liked")
+
         }
         else {
-            $(this).removeClass("Red")
-            $(this).addClass("White")
+            $(this).addClass("liked ")
         }
 
     }
 
-   
+
 
      function AddCommentButtonClick(e) {
         e.preventDefault();
@@ -162,61 +159,63 @@
      function ViewCommentsButtonClick(e) {
         e.preventDefault();
         var post = $(this).parents(".PostDiv");
-         if ($(this).data("toogle") == "view") {
+         if ($(this).data("toogle") == "hide") {
+             var lastComment = post.find(".commentDiv :last-child.comm");
+             post.find(".commentDiv").html(lastComment);
+             $(this).data("toogle", "view");
 
+
+        }
+        else {           
             var postId = post.data("post-id");
             $.get('@Url.Action("GetComments")/' + postId).done((res) => {
                 post.find(".commentDiv").html(RenderCommentHtml(res))
             }).always();
              $(this).data("toogle","hide");
-            $(this).text("HideComments");
-        }
-        else {
-            var lastComment = post.find(".commentDiv :last-child.comm");
-            post.find(".commentDiv").html(lastComment);
-            $(this).data("toogle", "view");
-            $(this).text("ViewComment");
+
          }
     }
 
+     function DeletePostButtonClick(e) {
+         //Показать модальное окно удаления, удалить
+     }
+
 </script>
-<style>
-
-    .Img_Preview {
-        max-width: 150px;
-        max-height: 150px;
-        border-radius: 15px;
-        cursor: crosshair;
+<div class="MainWrapper">
+    @if (Model.FormMode == MyInstaMVC.Models.PostFormMode.my)
+    {
+        Html.RenderAction("MyProfile", "UserProfile");
     }
-
-        .Img_Preview:hover {
-            border: 2px dashed red;
+    @if (Model.ShowAdminControl == true)
+    {
+        <a href="javascript:void(0);" onclick="CreateAdmin();">Добавить новость(админ)</a>
+    }
+    @if (Model.ShowAdminControl == false)
+    {
+        <a href="javascript:void(0);" onclick="Create();">Добавить новость</a>
+    }
+    <div id="CreateForm">
+    </div>
+    
+    <div id="MainContainer">
+        @if (Model.ShowAdminControl == true)
+        {
+            foreach (var post in Model.Posts)
+            {
+                Html.RenderPartial("_PostViewAdmin", post);
+            }
+        }
+        else
+        {
+            foreach (var post in Model.Posts)
+            {
+                Html.RenderPartial("_PostView", post);
+            }
         }
 
-    .PostDiv {
-        border: 2px blue solid;
-    }
-</style>
-
-@if (Model.ShowAdminControl == true)
-{
-    <a href="javascript:void(0);" onclick="CreateAdmin();">CreateAdmin</a>
-}
-@if (Model.ShowAdminControl == false)
-{
-    <a href="javascript:void(0);" onclick="Create();">Create</a>
-}
-<div id="CreateForm">
-</div>
-<div id="MainContainer">
-
-    @foreach (var post in Model.Posts)
+    </div>
+    @if (Model.NextExist)
     {
-        Html.RenderPartial("_PostView", post);
-        
+        <a href="javascript:void(0);" class="next_link" onclick="NextPage()">Next...</a>
     }
 </div>
-@if (Model.NextExist)
-{
-    <a href="javascript:void(0);" class="next_link" onclick="NextPage()">Next...</a>
-}

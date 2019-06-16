@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat.cs">
+      <DependentUpon>EntityDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Comments.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
@@ -83,10 +86,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityDb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Friends.cs">
+      <DependentUpon>EntityDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Images.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Likes.cs">
+      <DependentUpon>EntityDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Love.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Posts.cs">
@@ -102,10 +111,10 @@
     <Compile Include="Subscribtions.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="sysdiagrams.cs">
+    <Compile Include="Users.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Users.cs">
+    <Compile Include="User_Chat.cs">
       <DependentUpon>EntityDb.tt</DependentUpon>
     </Compile>
   </ItemGroup>

@@ -45,6 +45,7 @@ namespace MyInstaMVC.Controllers
                     RegDate = DateTime.Now,
                     SharedProfile = model.SharedProfile,
                     LoginName = model.LoginName,
+                    Gender = model.Gender,
                     AvatarContent = avatarcont,
                     AvatarMime = avatarmime
                 });
@@ -115,7 +116,7 @@ namespace MyInstaMVC.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index","Post");
                     }
                 }
             }
@@ -131,6 +132,30 @@ namespace MyInstaMVC.Controllers
 
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "User", null);
+        }
+
+        public ActionResult Avatar(long Id = 0)
+        {
+            if (Id == 0) Id = ((CustomPrincipal)User).UserId;           
+            var avatar = BLL.Data.GetAvatar(Id);
+            if (avatar.Mime == "NULL")
+                return null;
+            return File(avatar.Content, avatar.Mime);
+        }
+
+        public ActionResult GetUsers()
+        {
+            var users = BLL.Data.GetUsers();
+            IEnumerable<UserModel> userModel;
+            userModel = users.Select(x => new UserModel()
+            {
+                LoginName = x.LoginName,
+                NickName = x.NickName,
+                Id = x.ID,
+                Description = x.Description
+            });
+            
+            return View(userModel);
         }
     }
     [CustomAuthorize(Roles = "Admin")]

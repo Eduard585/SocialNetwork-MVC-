@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Хранилище Insta_DataBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
         <EntityType Name="Comments">
           <Key>
             <PropertyRef Name="ID" />
@@ -14,6 +23,14 @@
           <Property Name="UserID" Type="bigint" Nullable="false" />
           <Property Name="PostID" Type="bigint" Nullable="false" />
           <Property Name="CommentText" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Friends">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="FriendId" />
+          </Key>
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="FriendId" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="Images">
           <Key>
@@ -34,6 +51,16 @@
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="UserID" Type="bigint" Nullable="false" />
           <Property Name="PostID" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Love">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="NickName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Posts">
           <Key>
@@ -77,17 +104,17 @@
           <Property Name="UserID" Type="bigint" Nullable="false" />
           <Property Name="FollowingUserID" Type="bigint" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="User_Chat">
           <Key>
-            <PropertyRef Name="diagram_id" />
+            <PropertyRef Name="SenderId" />
+            <PropertyRef Name="Date" />
           </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
+          <Property Name="SenderId" Type="bigint" Nullable="false" />
+          <Property Name="RecipientId" Type="bigint" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="300" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -104,7 +131,20 @@
           <Property Name="SharedProfile" Type="bit" Nullable="false" />
           <Property Name="AvatarContent" Type="varbinary(max)" Nullable="false" />
           <Property Name="AvatarMime" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_Chat_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Comments_Posts">
           <End Role="Posts" Type="Self.Posts" Multiplicity="1" />
           <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
@@ -162,6 +202,18 @@
             </Principal>
             <Dependent Role="Likes">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Love_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Love" Type="Self.Love" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Love">
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -238,16 +290,23 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Хранилище Insta_DataBaseModelContainer">
+          <EntitySet Name="Chat" EntityType="Self.Chat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Friends" EntityType="Self.Friends" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Likes" EntityType="Self.Likes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Love" EntityType="Self.Love" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Posts" EntityType="Self.Posts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PostTags" EntityType="Self.PostTags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleMap" EntityType="Self.RoleMap" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subscribtions" EntityType="Self.Subscribtions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Chat" EntityType="Self.User_Chat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Chat_Users" Association="Self.FK_Chat_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Chat" EntitySet="Chat" />
+          </AssociationSet>
           <AssociationSet Name="FK_Comments_Posts" Association="Self.FK_Comments_Posts">
             <End Role="Posts" EntitySet="Posts" />
             <End Role="Comments" EntitySet="Comments" />
@@ -267,6 +326,10 @@
           <AssociationSet Name="FK_Likes_Users" Association="Self.FK_Likes_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Likes" EntitySet="Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Love_Users" Association="Self.FK_Love_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Love" EntitySet="Love" />
           </AssociationSet>
           <AssociationSet Name="FK_Posts_Users" Association="Self.FK_Posts_Users">
             <End Role="Users" EntitySet="Users" />
@@ -298,15 +361,22 @@
     <edmx:ConceptualModels>
       <Schema Namespace="Insta_DataBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="InstaDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Chat" EntityType="Insta_DataBaseModel.Chat" />
           <EntitySet Name="Comments" EntityType="Insta_DataBaseModel.Comments" />
+          <EntitySet Name="Friends" EntityType="Insta_DataBaseModel.Friends" />
           <EntitySet Name="Images" EntityType="Insta_DataBaseModel.Images" />
           <EntitySet Name="Likes" EntityType="Insta_DataBaseModel.Likes" />
+          <EntitySet Name="Love" EntityType="Insta_DataBaseModel.Love" />
           <EntitySet Name="Posts" EntityType="Insta_DataBaseModel.Posts" />
           <EntitySet Name="PostTags" EntityType="Insta_DataBaseModel.PostTags" />
           <EntitySet Name="Roles" EntityType="Insta_DataBaseModel.Roles" />
           <EntitySet Name="Subscribtions" EntityType="Insta_DataBaseModel.Subscribtions" />
-          <EntitySet Name="sysdiagrams" EntityType="Insta_DataBaseModel.sysdiagrams" />
+          <EntitySet Name="User_Chat" EntityType="Insta_DataBaseModel.User_Chat" />
           <EntitySet Name="Users" EntityType="Insta_DataBaseModel.Users" />
+          <AssociationSet Name="FK_Chat_Users" Association="Insta_DataBaseModel.FK_Chat_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Chat" EntitySet="Chat" />
+          </AssociationSet>
           <AssociationSet Name="FK_Comments_Posts" Association="Insta_DataBaseModel.FK_Comments_Posts">
             <End Role="Posts" EntitySet="Posts" />
             <End Role="Comments" EntitySet="Comments" />
@@ -326,6 +396,10 @@
           <AssociationSet Name="FK_Likes_Users" Association="Insta_DataBaseModel.FK_Likes_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Likes" EntitySet="Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Love_Users" Association="Insta_DataBaseModel.FK_Love_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Love" EntitySet="Love" />
           </AssociationSet>
           <AssociationSet Name="FK_Posts_Users" Association="Insta_DataBaseModel.FK_Posts_Users">
             <End Role="Users" EntitySet="Users" />
@@ -348,6 +422,16 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Insta_DataBaseModel.FK_Chat_Users" FromRole="Chat" ToRole="Users" />
+        </EntityType>
         <EntityType Name="Comments">
           <Key>
             <PropertyRef Name="ID" />
@@ -359,6 +443,14 @@
           <Property Name="CommentText" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Posts" Relationship="Insta_DataBaseModel.FK_Comments_Posts" FromRole="Comments" ToRole="Posts" />
           <NavigationProperty Name="Users" Relationship="Insta_DataBaseModel.FK_Comments_Users" FromRole="Comments" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Friends">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="FriendId" />
+          </Key>
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="FriendId" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="Images">
           <Key>
@@ -382,6 +474,17 @@
           <Property Name="PostID" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Posts" Relationship="Insta_DataBaseModel.FK_Likes_Posts" FromRole="Likes" ToRole="Posts" />
           <NavigationProperty Name="Users" Relationship="Insta_DataBaseModel.FK_Likes_Users" FromRole="Likes" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Love">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="NickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Insta_DataBaseModel.FK_Love_Users" FromRole="Love" ToRole="Users" />
         </EntityType>
         <EntityType Name="Posts">
           <Key>
@@ -424,19 +527,19 @@
           <Property Name="UserID" Type="Int64" Nullable="false" />
           <Property Name="FollowingUserID" Type="Int64" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
           <NavigationProperty Name="Users" Relationship="Insta_DataBaseModel.FK_Subscribtions_Users" FromRole="Subscribtions" ToRole="Users" />
           <NavigationProperty Name="Users1" Relationship="Insta_DataBaseModel.FK_Subscribtions_Users1" FromRole="Subscribtions" ToRole="Users" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="User_Chat">
           <Key>
-            <PropertyRef Name="diagram_id" />
+            <PropertyRef Name="SenderId" />
+            <PropertyRef Name="Date" />
           </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="SenderId" Type="Int64" Nullable="false" />
+          <Property Name="RecipientId" Type="Int64" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -453,13 +556,28 @@
           <Property Name="SharedProfile" Type="Boolean" Nullable="false" />
           <Property Name="AvatarContent" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <Property Name="AvatarMime" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Chat" Relationship="Insta_DataBaseModel.FK_Chat_Users" FromRole="Users" ToRole="Chat" />
           <NavigationProperty Name="Comments" Relationship="Insta_DataBaseModel.FK_Comments_Users" FromRole="Users" ToRole="Comments" />
           <NavigationProperty Name="Likes" Relationship="Insta_DataBaseModel.FK_Likes_Users" FromRole="Users" ToRole="Likes" />
+          <NavigationProperty Name="Love" Relationship="Insta_DataBaseModel.FK_Love_Users" FromRole="Users" ToRole="Love" />
           <NavigationProperty Name="Posts" Relationship="Insta_DataBaseModel.FK_Posts_Users" FromRole="Users" ToRole="Posts" />
           <NavigationProperty Name="Subscribtions" Relationship="Insta_DataBaseModel.FK_Subscribtions_Users" FromRole="Users" ToRole="Subscribtions" />
           <NavigationProperty Name="Subscribtions1" Relationship="Insta_DataBaseModel.FK_Subscribtions_Users1" FromRole="Users" ToRole="Subscribtions" />
           <NavigationProperty Name="Roles" Relationship="Insta_DataBaseModel.RoleMap" FromRole="Users" ToRole="Roles" />
         </EntityType>
+        <Association Name="FK_Chat_Users">
+          <End Type="Insta_DataBaseModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="Insta_DataBaseModel.Chat" Role="Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Comments_Posts">
           <End Type="Insta_DataBaseModel.Posts" Role="Posts" Multiplicity="1" />
           <End Type="Insta_DataBaseModel.Comments" Role="Comments" Multiplicity="*" />
@@ -517,6 +635,18 @@
             </Principal>
             <Dependent Role="Likes">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Love_Users">
+          <End Type="Insta_DataBaseModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="Insta_DataBaseModel.Love" Role="Love" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Love">
+              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -578,6 +708,15 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище Insta_DataBaseModelContainer" CdmEntityContainer="InstaDbEntities">
+          <EntitySetMapping Name="Chat">
+            <EntityTypeMapping TypeName="Insta_DataBaseModel.Chat">
+              <MappingFragment StoreEntitySet="Chat">
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="Insta_DataBaseModel.Comments">
               <MappingFragment StoreEntitySet="Comments">
@@ -586,6 +725,14 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friends">
+            <EntityTypeMapping TypeName="Insta_DataBaseModel.Friends">
+              <MappingFragment StoreEntitySet="Friends">
+                <ScalarProperty Name="FriendId" ColumnName="FriendId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -607,6 +754,17 @@
                 <ScalarProperty Name="PostID" ColumnName="PostID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Love">
+            <EntityTypeMapping TypeName="Insta_DataBaseModel.Love">
+              <MappingFragment StoreEntitySet="Love">
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -650,20 +808,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="Insta_DataBaseModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="User_Chat">
+            <EntityTypeMapping TypeName="Insta_DataBaseModel.User_Chat">
+              <MappingFragment StoreEntitySet="User_Chat">
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="RecipientId" ColumnName="RecipientId" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Insta_DataBaseModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="AvatarMime" ColumnName="AvatarMime" />
                 <ScalarProperty Name="AvatarContent" ColumnName="AvatarContent" />
                 <ScalarProperty Name="SharedProfile" ColumnName="SharedProfile" />

@@ -1,8 +1,19 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding-top:50px;
+    background-color: #EFF4FF !important;
 }
 
+#MainContainer {
+    background-color: #EFF4FF;
+}
+
+#MainContainer .row {
+    padding-top: 10px;
+    
+}
+.MainWrapper{
+    padding-top: 40px;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -16,4 +27,22 @@ textarea {
     max-width: 280px;
 }
 
+.MainNavBar {
+    background-color: #4E6AA6;
+    margin-bottom: 40px;   
+    
+}
 
+.navbar-header .navbar-brand {
+    color: #F6F9FF;
+}
+
+.user-profiling img{
+    max-height:40px;
+    max-width:80px;
+    border-radius:5px;
+}
+
+.user-profiling{
+    
+}

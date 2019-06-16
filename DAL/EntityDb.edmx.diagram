@@ -4,21 +4,26 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5658ac66339e4c149ef2ab5444e36207" Name="Diagram1">
-        <EntityTypeShape EntityType="Insta_DataBaseModel.Comments" Width="1.5" PointX="10.5" PointY="7.75" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.Images" Width="1.5" PointX="7.5" PointY="10" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.Likes" Width="1.5" PointX="10.5" PointY="10.875" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.Posts" Width="1.5" PointX="5.25" PointY="8.5" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.PostTags" Width="1.5" PointX="7.5" PointY="7.625" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.Roles" Width="1.5" PointX="0.5" PointY="7.125" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.Subscribtions" Width="1.5" PointX="4.125" PointY="12.5" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Insta_DataBaseModel.Users" Width="1.5" PointX="3" PointY="6.25" />
+      <Diagram DiagramId="5658ac66339e4c149ef2ab5444e36207" Name="Diagram1" ZoomLevel="73">
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Chat" Width="1.5" PointX="5.25" PointY="14" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Comments" Width="1.5" PointX="7.5" PointY="15" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Friends" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Images" Width="1.5" PointX="7.5" PointY="19.375" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Likes" Width="1.5" PointX="7.5" PointY="12.125" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Love" Width="1.5" PointX="5.25" PointY="7.875" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Posts" Width="1.5" PointX="5.25" PointY="20.25" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.PostTags" Width="1.5" PointX="7.5" PointY="22.5" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Roles" Width="1.5" PointX="0.75" PointY="10.625" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Subscribtions" Width="1.5" PointX="5.25" PointY="4.75" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.User_Chat" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Insta_DataBaseModel.Users" Width="1.5" PointX="3" PointY="9" />
+        <AssociationConnector Association="Insta_DataBaseModel.FK_Chat_Users" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Comments_Posts" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Comments_Users" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Images_Posts" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Likes_Posts" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Likes_Users" />
+        <AssociationConnector Association="Insta_DataBaseModel.FK_Love_Users" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Posts_Users" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_PostTags_Posts" />
         <AssociationConnector Association="Insta_DataBaseModel.FK_Subscribtions_Users" />

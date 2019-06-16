@@ -27,6 +27,7 @@ namespace MyInstaMVC.Models
         public System.DateTime BirthDate { get; set; }
         [Required]
         public bool SharedProfile { get; set; }
-
+        [Required]
+        public string Gender { get; set; }
     }
 }

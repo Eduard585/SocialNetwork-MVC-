@@ -17,7 +17,7 @@ namespace BLL.DTO
        // public string LocationName { get; set; }
         public DateTime PublicateDate { get; set; }
         public bool News {get;set;}
-       public bool IsLiked { get; set; }
+        public bool IsLiked { get; set; }
 
         public virtual List<CommentDTO> Comments { get; set; }
         public virtual List<ImageDTO> Images { get; set; }

@@ -1,0 +1,88 @@
+﻿@model MyInstaMVC.Models.ChatModel
+
+@{
+    ViewBag.Title = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="MainWrapper" id="ChatMainWrapper">
+    <div class="container">
+        <input type="text" id="message" placeholder="Напишите сообщение..." style="min-width:600px"/>
+        <input class="btn btn-success" type="button" id="sendmessage" value="Отправить" />
+        <input type="hidden" id="displayname" />
+
+    </div>
+    <div id="message-container" class="justify-content-center align-items-center">      
+    </div>   
+    <button onclick="getMoreMessages()">Конец страницы </button>
+</div>
+
+<link rel="stylesheet" type="text/css" href="~/Content/ChatStyle.css" />
+
+
+<script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+<script src="~/signalr/hubs"></script>
+
+
+
+<script type="text/javascript">
+    var currentPage = 1;
+
+    $(function () {
+
+        var chat = $.connection.chatHub;
+        chat.client.broadcastMessage = function (userId, message) {
+            var hgData = {
+                Chats:{
+                UserId: userId,
+                Message: message
+                }
+            };                   
+            addMessage(hgData);
+        };
+
+        $('#displayname').val('@Model.currentChatUser');
+        $('#message').focus();
+
+        $.connection.hub.start().done(function () {
+            $('#sendmessage').click(function () {
+                if ($('#message').val() != "") {
+                chat.server.send(@Model.currentChatUser, $('#message').val());
+                $('#message').val('').focus();
+                }
+            });
+        });
+
+    });
+
+
+     function getMoreMessages() {
+         
+        $.get('@Url.Action("/GetChatMessages")', { currentPage: currentPage }).done(function(res) {
+            $('#message-container').append(RenderMessages(res));
+            currentPage += 1;
+            }).always();
+    }
+
+     function addMessage(data) {
+         $('#message-container').prepend(RenderMessages(data));
+         $('#message-container > div').last().remove();
+     }
+
+     function RenderMessages(data) {
+            var temp = $('#message-template1').html();
+            var template = Hogan.compile(temp);
+            return template.render(data);
+        }
+
+     function init(){
+         $.get('@Url.Action("/GetChatMessages")', { currentPage: 0 }).done(function(res) {
+            $('#message-container').append(RenderMessages(res));
+            }).always();
+     }
+     init();
+
+</script>
+
+<script type="text/template" id="message-template1">
+@Html.Raw(Html.Partial("_MessageView1"))
+</script>

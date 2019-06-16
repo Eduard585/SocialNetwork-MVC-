@@ -21,7 +21,7 @@ namespace MyInstaMVC
             var model = new Models.PostModel { FormMode = PostFormMode.all };
             model.Posts = BLL.Data.GetPosts(currentUserId: _currentUserId );
             model.NextExist = BLL.Data.GetPosts(1).Any();
-            model.ShowAdminControl = user.IsInRole("Admin");
+            model.ShowAdminControl = user.IsInRole("Admin");            
             return View(model);
         }
 
@@ -78,10 +78,6 @@ namespace MyInstaMVC
                 model.UserId = _currentUserId.Value;
 
                 BLL.Data.CreatePost(model);
-
-
-
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -161,15 +157,17 @@ namespace MyInstaMVC
             var model = new Models.PostModel { FormMode = my ? PostFormMode.my : PostFormMode.all };
             model.Posts = BLL.Data.GetPosts(page, my ? _currentUserId : null,_currentUserId);
             model.NextExist = BLL.Data.GetPosts(page + 1, my ? _currentUserId : null).Any();
+            
             return PartialView("_MorePostView", model);
 
         }
+        [HttpGet]
         public PartialViewResult GetPost(long id)
         {
             var model = BLL.Data.GetPostById(id);
             return PartialView("_PostView", model);
         }
-
+        [HttpGet]
         public JsonResult GetComments(long id)
         {
             var model = BLL.Data.GetPostById(id);
@@ -177,7 +175,7 @@ namespace MyInstaMVC
             
         }
 
-        [HttpPost]
+              
         public JsonResult AddComment(long postId, string commentText)
         {
             var result = new JsonResultResponse { Success = true };

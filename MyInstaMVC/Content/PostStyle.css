@@ -1,0 +1,66 @@
+﻿.Img_Preview {
+    max-width: 700px;
+    max-height: 500px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+  
+
+.PostDiv {
+    padding-top: 4px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.post_div_inner{
+    margin: 5px;
+}
+
+.LikeButtonDiv :hover {
+    color: #fb7777;
+}
+
+.like_btn.liked .like_btn_icon {
+    background-image: url('../../Content/Icons/heart-solid.svg');
+}
+
+.like_btn .like_btn_icon {
+    background-image: url('../../Content/Icons/heart-regular.svg');
+}
+
+.like_controls{
+    margin-right:10px;
+}
+
+.like_btn_icon {
+    height: 30px;
+    width: 30px;
+        
+}
+
+
+
+.comment_btn .comment_btn_icon {
+    background-image: url('../../Content/Icons/comment-regular.svg');
+}
+
+.comment_btn_icon{
+    height:30px;
+    width:30px;
+}
+
+.comment_div{
+    margin-right:10px;
+}
+
+.like_count {
+    margin-left: 5px;
+}
+
+a {
+    cursor: pointer;
+}
+
+.comm {
+    border-bottom: 1px solid #d8d8d8;
+}

@@ -18,7 +18,7 @@ namespace BLL.DTO
                 using (var binaryReader = new BinaryReader(file.InputStream))
                 {
                     Content = binaryReader.ReadBytes(file.ContentLength);
-                    Mime = file.ContentType;
+                    Mime = file.ContentType;//добавлен коммент
                 }
             }
         }
