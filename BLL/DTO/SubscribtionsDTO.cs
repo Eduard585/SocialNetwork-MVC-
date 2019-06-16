@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BLL.DTO
 {
-    public partial class Love
+    public class SubscribtionsDTO
     {
         public long ID { get; set; }
-        public int Number { get; set; }
+        public long UserID { get; set; }
+        public long FollowingUserID { get; set; }
         public DateTime Date { get; set; }
-        public string Gender { get; set; }
-        public string NickName { get; set; }
+        public bool isActive { get; set; }
     }
 }

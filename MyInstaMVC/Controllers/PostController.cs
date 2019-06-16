@@ -175,7 +175,7 @@ namespace MyInstaMVC
             
         }
 
-        [HttpPut]      
+              
         public JsonResult AddComment(long postId, string commentText)
         {
             var result = new JsonResultResponse { Success = true };

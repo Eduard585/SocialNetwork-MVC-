@@ -5,12 +5,20 @@
     max-width:50px;
     max-height:25px;
     border-radius: 30%;
+    margin-top:7px;
 }
 
 .message-text{
     padding-left:8px;
 }
+.message-text > p {
+    margin-top:7px;
+}
 
 #message-container{
     padding-top:10px;
 }
+
+    #message-container .row:nth-child(2n) {
+        background-color: #d6e2ff;
+    }

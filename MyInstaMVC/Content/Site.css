@@ -12,7 +12,7 @@
     
 }
 .MainWrapper{
-    padding-top: 10px;
+    padding-top: 40px;
 }
 /* Set padding to keep content from hitting the edges */
 .body-content {
@@ -44,5 +44,5 @@ textarea {
 }
 
 .user-profiling{
-    padding-left:400px;
+    
 }

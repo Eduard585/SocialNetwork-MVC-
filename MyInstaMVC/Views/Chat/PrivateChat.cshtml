@@ -1,0 +1,37 @@
+﻿@model MyInstaMVC.Models.ChatModel
+
+    <div class="MainWrapper" id="ChatMainWrapper">
+        <div class="container">
+            <input type="text" id="message" placeholder="Напишите сообщение..." style="min-width:600px" />
+            <input class="btn btn-success" type="button" id="sendmessage" value="Отправить" />
+            <input type="hidden" id="displayname" />
+
+        </div>
+        <div id="message-container" class="justify-content-center align-items-center">
+        </div>
+        <button onclick="getMoreMessages()">Конец страницы </button>
+    </div>
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script type="text/javascript">
+    $(function() {
+        var chat = $.connection.chatHub;
+        chat.client.sendPrivateMessage = function(message) {
+            alert("yes");
+        }
+
+        $.connection.hub.start().done(function () {
+            $('#sendmessage').click(function () {
+                if ($('#message').val() != "") {
+                    chat.server.sendPrivate(4, $('#message').val());
+                    $('#message').val('').focus();
+                }
+            });
+        });
+
+        function addMessage(message) {
+            $('#message-container').append(message);
+            
+        }
+    })
+</script>

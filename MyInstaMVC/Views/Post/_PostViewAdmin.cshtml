@@ -13,22 +13,13 @@
             <div class="ImgDiv img_container">
                 @foreach (var image in Model.Images)
                 {
-
                     <div><img src='@Url.Action("GetImage")/@image.Id' class='Img_Preview mx-auto' /></div>
-
                 }
             </div>
             <hr />
 
-            <div>
-                @if (Model.PublicateDate.ToString() != null)
-                {
-                    <a href="javascript:void(0);" onclick="PublishPost('@Model.Id', this)">Опубликовать</a>
-                }
-                else
-                {
-                    <text>@Model.PublicateDate.ToString()</text>
-                }
+            <div>                
+                    <text>@Model.PublicateDate.ToString()</text>                
             </div>
 
             <div class="post_controls_div d-flex">

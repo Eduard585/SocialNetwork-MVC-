@@ -21,8 +21,7 @@
 
             $("#MainContainer").append(res);
             currentPage = nextPage;
-        });
-        createSlick();
+        });       
     }
 
     function Create() {
@@ -182,37 +181,41 @@
      }
 
 </script>
-
-@if (Model.ShowAdminControl == true)
-{
-    <a href="javascript:void(0);" onclick="CreateAdmin();">CreateAdmin</a>
-}
-@if (Model.ShowAdminControl == false)
-{
-    <a href="javascript:void(0);" onclick="Create();">Create</a>
-}
-<div id="CreateForm">
-</div>
-<div id="MainContainer">
-    @if(Model.ShowAdminControl == true)
+<div class="MainWrapper">
+    @if (Model.FormMode == MyInstaMVC.Models.PostFormMode.my)
     {
-        foreach (var post in Model.Posts)
-        {
-            Html.RenderPartial("_PostViewAdmin", post);
-
-        }
+        Html.RenderAction("MyProfile", "UserProfile");
     }
-    else
+    @if (Model.ShowAdminControl == true)
     {
-        foreach (var post in Model.Posts)
-        {
-            Html.RenderPartial("_PostView", post);
-
-        }
+        <a href="javascript:void(0);" onclick="CreateAdmin();">Добавить новость(админ)</a>
     }
+    @if (Model.ShowAdminControl == false)
+    {
+        <a href="javascript:void(0);" onclick="Create();">Добавить новость</a>
+    }
+    <div id="CreateForm">
+    </div>
+    
+    <div id="MainContainer">
+        @if (Model.ShowAdminControl == true)
+        {
+            foreach (var post in Model.Posts)
+            {
+                Html.RenderPartial("_PostViewAdmin", post);
+            }
+        }
+        else
+        {
+            foreach (var post in Model.Posts)
+            {
+                Html.RenderPartial("_PostView", post);
+            }
+        }
 
+    </div>
+    @if (Model.NextExist)
+    {
+        <a href="javascript:void(0);" class="next_link" onclick="NextPage()">Next...</a>
+    }
 </div>
-@if (Model.NextExist)
-{
-    <a href="javascript:void(0);" class="next_link" onclick="NextPage()">Next...</a>
-}

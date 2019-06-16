@@ -1,0 +1,80 @@
+﻿    <input type="text" name="message" id="message">
+    <input type ="button" value="Отправить" onclick="SendMessage()">
+
+<input type="button" value="Close" onclick="CloseConnection()">
+
+<!-- здесь будут появляться входящие сообщения -->
+<div id="subscribe"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script>
+
+        //window.onload = function() {
+        //    alert("Hi");
+        //}
+        //var socket = new WebSocket("ws://localhost:80/");
+
+        //socket.onmessage = function(event) {
+        //    var incomingMessage = event.data;
+        //    showMessage(incomingMessage);
+        //};
+
+        //function SendMessage() {
+        //    var message = document.getElementById('message').value;
+
+        //    socket.send(message);
+        //}
+
+        //function CloseConnection() {
+        //    socket.close();
+        //}
+
+        //function showMessage(message) {
+        //    var messageElem = document.createElement('div');
+        //    messageElem.appendChild(document.createTextNode(message));
+        //    document.getElementById('subscribe').appendChild(messageElem);
+        //}
+
+        var url = "ws://localhost:80";
+
+        if (!window.WebSocket) alert("WebSocket not supported by this browser");
+
+        var myWebSocket = {
+            connect: function () {
+                var location = url
+                this._ws = new WebSocket(location);
+                this._ws.onopen = this._onopen;
+                this._ws.onmessage = this._onmessage;
+                this._ws.onclose = this._onclose;
+                this._ws.onerror = this._onerror;
+            },
+
+            _onopen: function () {
+                console.log("WebSocket Connected");
+            },
+
+            _onmessage: function (message) {
+                console.log("Message Recieved: " + message.data);
+            },
+
+            _onclose: function () {
+                console.log("WebSocket Closed");
+                this._ws.connect();
+            },
+
+            _onerror: function (e) {
+                console.log("Error occured: " + e);
+            },
+
+            _send: function (message) {
+                console.log("Message Send: " + message);
+                if (this._ws) this._ws.send(message);
+            }
+        };
+
+        myWebSocket.connect();
+        setInterval(function() {
+            myWebSocket._send('msg1');
+        }, 5000);
+
+    </script>

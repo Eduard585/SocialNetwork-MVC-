@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using BLL.DTO;
@@ -79,6 +82,50 @@ namespace BLL
             }
         }
 
+        public static string UpdateSubscribing(SubscribtionsDTO subs)
+        {
+            using (var ctx = new DAL.InstaDbEntities())
+            {
+                var dbSub = ctx.Subscribtions.FirstOrDefault(x =>
+                    x.UserID == subs.UserID && x.FollowingUserID == subs.FollowingUserID);               
+                if (dbSub == null)
+                {
+                    dbSub = AutoMapper.Mapper.Map<DAL.Subscribtions>(subs);
+                    ctx.Subscribtions.Add(dbSub);
+                    
+                    var dbSub2 = ctx.Subscribtions.FirstOrDefault(x =>
+                        x.UserID == subs.FollowingUserID && x.FollowingUserID == subs.UserID);
+                    if (dbSub2 != null)
+                    {
+                        ctx.Friends.Add(new DAL.Friends
+                        {
+                            UserId = subs.UserID,
+                            FriendId = subs.FollowingUserID
+                        });
+                    }
+                    ctx.SaveChanges();
+                    return "SubCreated";
+                }
+                else
+                {
+                    ctx.Subscribtions.Remove(dbSub);
+                    return "SubDeleted";
+                }
+            }
+
+        }
+
+        public static List<SubscribtionsDTO> GetSubscribtions(long currentUserId)
+        {
+            List<SubscribtionsDTO> subList = null;
+            using (var ctx = new DAL.InstaDbEntities())
+            {
+                var dbSubs = ctx.Subscribtions.Select(x => x.UserID == currentUserId).ToList();
+                AutoMapper.Mapper.Map(subList, dbSubs);
+            }
+
+            return subList;
+        }
         
         public static UserDTO GetUser(long? id = null, string Login = null)
         {
@@ -103,32 +150,43 @@ namespace BLL
             }
         }
 
-        public static IEnumerable<UserDTO> GetUsers(List<long> idArray)
+        public static IEnumerable<UserDTO> GetUsers()
         {
-            if (idArray.Count() == 0)
-                return null;
+            int take = 20;
             try
             {
                 using (var ctx = new DAL.InstaDbEntities())
                 {
-                    List<UserDTO> userList = null; 
-                    var dbuserList = from u in ctx.Users
-                                   where idArray.Contains(u.ID)
-                                   select u;
-                    if (dbuserList.Count() != 0)
-                    {
-                        AutoMapper.Mapper.Map(userList, dbuserList);
-                        return userList;
-                    }
-                    else return null;
-
-
+                    IEnumerable<UserDTO> userList = null;
+                    userList = ctx.Users.Select(AutoMapper.Mapper.Map<DTO.UserDTO>).Take(take).ToList();
+                    return userList;
                 }
             }
             catch(Exception ex)
             {
                 throw;
             }
+        }
+
+        private static IEnumerable<UserDTO> GetUsersById(List<long> userList)
+        {
+            using (var ctx = new DAL.InstaDbEntities())
+            {
+                var users = ctx.Users.Select(AutoMapper.Mapper.Map<DTO.UserDTO>).Where(x => userList.Contains(x.ID))
+                    .ToList();
+                return users;
+            }
+        }
+
+        public static IEnumerable<UserDTO> GetFriends(long? userId)
+        {
+            
+                using (var ctx = new DAL.InstaDbEntities())
+                {
+                    List<long> friendsListIds = null;
+                    friendsListIds = ctx.Friends.Where(x => x.UserId == userId).Select(x => x.UserId).ToList();
+                    return GetUsersById(friendsListIds);
+                }            
         }
 
         public static bool ValidateUser(string login, string password)
@@ -240,7 +298,7 @@ namespace BLL
                 dbPost.Images.Clear();
                 images.ForEach((x) => dbPost.Images.Add(x));
                 dbPost.Date = DateTime.Now;
-                dbPost.PublicateDate = null;
+                dbPost.PublicateDate = DateTime.Now;
                 ctx.Posts.Add(dbPost);
                 ctx.SaveChanges();
             }
@@ -268,7 +326,7 @@ namespace BLL
             
             using (var ctx = new DAL.InstaDbEntities())
             {
-                var temp = ctx.Posts.Where(x => !userId.HasValue && x.PublicateDate.HasValue || userId.HasValue && x.UserID == userId.Value);
+                var temp = ctx.Posts.Where(x => !userId.HasValue || userId.HasValue && x.UserID == userId.Value);
                 
                 res = temp.OrderByDescending(x => x.PublicateDate).ThenByDescending(x => x.Date).Skip(skip).Take(take).Select(AutoMapper.Mapper.Map<PostDTO>).ToList();
                 for(int i = 0; i<res.Count; i++)
@@ -283,6 +341,11 @@ namespace BLL
                 
             }
             return res;
+        }
+        
+        private static void LikePosts()
+        {
+
         }
         public static void PublishPost(long id)
         {
@@ -374,7 +437,7 @@ namespace BLL
 
             using (var ctx = new DAL.InstaDbEntities())
             {
-                var temp = ctx.Loves.Where(x => x.ID >=0);
+                var temp = ctx.Love.Where(x => x.ID >=0);
                 res = temp.OrderByDescending(x => x.Date).Select(AutoMapper.Mapper.Map<Love>).ToList();
             }
             return res;
@@ -390,17 +453,18 @@ namespace BLL
 
                 using (var ctx = new DAL.InstaDbEntities())
                 {
-                    if(ctx.Loves.Any(x=>x.ID == love.ID))
+                    if(ctx.Love.Any(x=>x.ID == love.ID))
                         throw new Exception($"Вы уже получили свою валентинку!");
                     var gender = ctx.Users.Where(x => x.ID == love.ID).Select(x => x.Gender).FirstOrDefault();
                     
-                    var number = ctx.Loves.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;
+                    var number = ctx.Love.Where(x=>x.Gender == gender).OrderByDescending(x => x.Date).FirstOrDefault().Number;
                     number++;
-                    var dbLove = AutoMapper.Mapper.Map<DAL.Loves>(love);
+                    var dbLove = AutoMapper.Mapper.Map<DAL.Love>(love);
                     dbLove.Gender = gender;
                     dbLove.Number = number;
+                    dbLove.NickName = ctx.Users.Where(x => x.ID == love.ID).Select(x => x.NickName).FirstOrDefault();
 
-                    ctx.Loves.Add(dbLove);
+                    ctx.Love.Add(dbLove);
                     ctx.SaveChanges();
                     var retL = AutoMapper.Mapper.Map<DTO.Love>(dbLove);//Требуется доработка. Можно не создавать доп. переменные а записывать все в love
                     return retL;
@@ -412,38 +476,53 @@ namespace BLL
             }
         }
 
-        public static List<ChatDTO> GetChatMessages(int page = 0)
+        public static List<ChatDTO> GetChatMessages(long RecipientId, int page = 0)
         {
             int take = 15;
-            int skip = take * page;
-            List<long> idList = new List<long>();
+            int skip = take * page;          
             var res = (List<ChatDTO>)null;
             using(var ctx = new DAL.InstaDbEntities())
             {
-                var temp = ctx.Chat.Where(x => x.Date != null);
+                var temp = ctx.User_Chat.Where(x => x.Date != null && x.RecipientId == RecipientId);
                 res = temp.OrderByDescending(x => x.Date).Skip(skip).Take(take).Select(AutoMapper.Mapper.Map<ChatDTO>).ToList();
-            }
-            //int max = res.Count();
-            //for (int i = 0;i<max;i++)
-            //{
-            //    res[i].User = GetUser(res[i].UserId);
-            //}
-            //foreach(var u in res)
-            //{
-            //    idList.Add(u.UserId);
-            //}
-            //GetUsers(idList);
+            }          
             return res;
         }
 
         public static void CreateMessage(ChatDTO chat)
         {
-            using (var ctx = new DAL.InstaDbEntities())
-            {
-                var dbChat = AutoMapper.Mapper.Map<DAL.Chat>(chat);
-                ctx.Chat.Add(dbChat);
-                ctx.SaveChanges();
-            }
+           
+                using (var ctx = new DAL.InstaDbEntities())
+                {
+                    var dbChat = AutoMapper.Mapper.Map<DAL.User_Chat>(chat);
+                    ctx.User_Chat.Add(dbChat);
+                    try
+                    {
+                        ctx.SaveChanges();
+                    }
+                    catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+                    {
+                    Exception raise = dbEx;
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            string message = string.Format("{0}:{1}",
+                                validationErrors.Entry.Entity.ToString(),
+                                validationError.ErrorMessage);
+                            // raise a new exception nesting
+                            // the current instance as InnerException
+                            raise = new InvalidOperationException(message, raise);
+                        }
+                    }
+                    throw raise;
+                }
+
+                }
+            
+           
+
+
         }
 
     }

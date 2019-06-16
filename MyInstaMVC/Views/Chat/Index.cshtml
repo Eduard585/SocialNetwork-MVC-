@@ -6,8 +6,8 @@
 }
 <div class="MainWrapper" id="ChatMainWrapper">
     <div class="container">
-        <input type="text" id="message" />
-        <input type="button" id="sendmessage" value="Send" />
+        <input type="text" id="message" placeholder="Напишите сообщение..." style="min-width:600px"/>
+        <input class="btn btn-success" type="button" id="sendmessage" value="Отправить" />
         <input type="hidden" id="displayname" />
 
     </div>
@@ -25,7 +25,7 @@
 
 
 <script type="text/javascript">
-    var currentPage = 0;
+    var currentPage = 1;
 
     $(function () {
 
@@ -56,9 +56,10 @@
 
 
      function getMoreMessages() {
-        currentPage += 1;
+         
         $.get('@Url.Action("/GetChatMessages")', { currentPage: currentPage }).done(function(res) {
             $('#message-container').append(RenderMessages(res));
+            currentPage += 1;
             }).always();
     }
 
@@ -74,7 +75,7 @@
         }
 
      function init(){
-         $.get('@Url.Action("/GetChatMessages")', { currentPage: currentPage }).done(function(res) {
+         $.get('@Url.Action("/GetChatMessages")', { currentPage: 0 }).done(function(res) {
             $('#message-container').append(RenderMessages(res));
             }).always();
      }

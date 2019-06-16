@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MyInstaMVC.Models.UserModel>
+
+@{
+    ViewBag.Title = "GetUsers";
+}
+<div class="MainWrapper">
+    <h2>Пользователи системы</h2>
+
+    
+    <table class="table">
+        <tr>
+            <th>
+                Логин
+            </th>
+            <th>
+                Никнейм
+            </th>
+            <th>
+                Аватар
+            </th>            
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoginName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NickName)
+                </td>
+                <td>
+                    <div class="user-profiling">
+                        <img onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar","User",new {id=item.Id })" />
+                    </div>
+                </td>                
+                <td>
+                    <a href='@Url.Action("Index","UserProfile",new {userId = item.Id })'>Профиль</a> |                    
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

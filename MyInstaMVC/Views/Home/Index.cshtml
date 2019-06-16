@@ -13,36 +13,30 @@
                 <a ng-click="CreateLoves()" class="LoveButton"><i class="fas fa-heart"></i></a>
             </div>
         </div>
-
-        <input type="text" id="query" ng-model="query" />
-
-
-
         <br />
         <div class="row">
             <div class="col-lg-6 col-md-6 col-xs-6">
-
-                <table class="table table-he">
-                    <caption>Он</caption>
+                <div style="text-align:right"><span>Он</span></div>
+                <table class="table table-he">                  
                     <tr>
-                        <th>ID</th>
-                        <th>Number</th>
+                        <th>Номер</th>
+                        <th style="text-align:right">Имя</th>
                     </tr>
                     <tr ng-repeat="l in manloves |  orderBy: '-Number'">
-                        <td>{{l.ID}}</td>
                         <td>{{l.Number}}</td>
+                        <td style="text-align:right">{{l.NickName}}</td>                       
                     </tr>
                 </table>
             </div>
             <div class="col-lg-6 col-md-6 col-xs-6 ">
-                <table class="table table-she">
-                    <caption>Она</caption>
+                <span>Она</span>
+                <table class="table table-she">                   
                     <tr>
-                        <th>ID</th>
-                        <th>Number</th>
+                        <th>Имя</th>
+                        <th>Номер</th>
                     </tr>
                     <tr ng-repeat="l in girlloves | orderBy: '-Number'">
-                        <td>{{l.ID}}</td>
+                        <td>{{l.NickName}}</td>
                         <td>{{l.Number}}</td>
                     </tr>
                 </table>

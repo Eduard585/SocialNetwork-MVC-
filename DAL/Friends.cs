@@ -12,12 +12,9 @@ namespace DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class Chat
+    public partial class Friends
     {
         public long UserId { get; set; }
-        public System.DateTime Date { get; set; }
-        public string Message { get; set; }
-    
-        public virtual Users Users { get; set; }
+        public long FriendId { get; set; }
     }
 }

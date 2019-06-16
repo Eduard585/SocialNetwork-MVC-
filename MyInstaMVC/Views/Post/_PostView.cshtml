@@ -20,15 +20,8 @@
             </div>
             <hr />
 
-            <div>
-                @if (Model.PublicateDate.ToString() != null)
-                {
-                    <a href="javascript:void(0);" onclick="PublishPost('@Model.Id', this)">Опубликовать</a>
-                }
-                else
-                {
-                    <text>@Model.PublicateDate.ToString()</text>
-                }
+            <div>              
+                    <text>@Model.PublicateDate.ToString()</text>                
             </div>
 
             <div class="post_controls_div d-flex">
@@ -67,12 +60,12 @@
             </div>
             <div class="add-comment">
                 <div class="add_comment">
-                    <button class="AddCommentButton">Добавить комментарий</button>
+                    <input type="button" class="AddCommentButton btn btn-success" value="Добавить комментарий" style="margin-top:10px"/>                  
                 </div>
-                <div class="col-lg-1">
+                <div class="col-lg-5">
                     <div class="AddComentDiv" style="display:none">
-                        <textarea class="CommentText"></textarea>
-                        <button class="SendCommentText">Send</button>
+                        <textarea class="form-control CommentText"></textarea>                      
+                        <input type="button" class="SendCommentText btn btn-success" value="Добавить комментарий" style="margin-top:10px"/>  
                     </div>
                 </div>
             </div>

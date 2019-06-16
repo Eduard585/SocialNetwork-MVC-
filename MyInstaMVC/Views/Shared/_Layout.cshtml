@@ -27,12 +27,12 @@
 <body>
     <div class="navbar navbar-inverse fixed-top MainNavBar">
         <div class="container">
-            <div class="navbar-header mx-auto d-flex">
+            <div class="navbar-header mx-auto d-flex" style="">
                 <div class="home-page">
                     @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
                 @*@Html.ActionLink("Логин", "Login", "User", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Регистрация", "Registration", "User", new { area = "" }, new { @class = "navbar-brand" })*@
+        @Html.ActionLink("Регистрация", "Registration", "User", new { area = "" }, new { @class = "navbar-brand" })*@
                 <div class="my-profile">
                     @Html.ActionLink("Мой профиль", "MyProfile", "UserProfile", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
@@ -45,16 +45,18 @@
                 <div class="chat-room">
                     @Html.ActionLink("Общая комната", "Index", "Chat", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
-                @*@Url.Action("Index","UserProfile", new { userId = 2 })*@
-                @*<div class="user-profiling">
-                    <a href='@Url.Action("Index","UserProfile")'>
-                        <img src='@Url.Action("Avatar","User")' />
-                    </a>
-                    <a href='@Url.Action("Index","UserProfile")'>
-                        @Url.Action("GetUserNickName","UserProfile")
-                    </a>
-                </div>*@
-                
+                <div class="user-search">
+                    @Html.ActionLink("Поиск друзей", "GetUsers", "User", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+            </div>
+            <div class="user-profiling dropdown">              
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src='@Url.Action("Avatar","User")' />
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownProfile">
+                    <a class="dropdown-item" href='@Url.Action("MyProfile","UserProfile")'>Мой профиль</a>                    
+                    <a class="dropdown-item" href='@Url.Action("Login","User")'>Выход</a>
+                </div>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav"></ul>
@@ -97,8 +99,16 @@
 </script>
 
 <script>
+    function reSlick() {
+        $('.ImgDiv').slick('unslick');
+        createSlick();
+    }
     function createSlick() {
-        $('.ImgDiv').not('.slick-initialized').slick();
+        $('.ImgDiv').slick({
+            dots: true,
+            speed: 150,
+            centerMode: true
+        });
     }
     $(document).ready(function () {
         createSlick();
