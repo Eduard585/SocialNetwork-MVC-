@@ -1,20 +1,23 @@
-﻿@model MyInstaMVC.Models.UserProfileModel
+﻿@using MyInstaMVC.CustomAuth
+@model MyInstaMVC.Models.UserProfileModel
 @{
     ViewBag.Title = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="MainWrapper">
     <div class="form-horizontal">
-        <h2>@Model.User.NickName</h2>
+        <h2 class="col-md-1">@Model.User.NickName</h2>
         <div class="form-group">
             <img class="control-label col-md-2" onerror="this.src='@Url.Content("~/Content/Images/MissingImage.jpg")'" src="@Url.Action("Avatar",new {Id=Model.User.Id })" title="Avatarka" />
         </div>
-        <h4>Описание</h4>
-        <div>@Model.User.Description</div>
-        <div><input type="button" class="btn btn-success" value="Подписаться" onclick="subscribe()" /></div>
-        <div><span><a href='@Url.Action("EditProfile","UserProfile")'>Редактировать профиль</a></span></div>
+        <h4 class="col-md-1">Описание</h4>        
+        <div style="margin-left:15px">@Model.User.Description</div>
+        <div style="margin-left:15px"><input type="button" class="btn btn-success" value="Подписаться" onclick="subscribe()" /></div>
+        @if (Model.User.Id == ((CustomPrincipal)User)?.UserId)
+        {
+            <div style="margin-left:15px"><span><a href='@Url.Action("EditProfile","UserProfile")'>Редактировать профиль</a></span></div>
+        }
     </div>
-</div>
+
 <script>
     function subscribe() {
         $.post("@Url.Action("UpdateSubscribtion","UserProfile")", { followingUserId: @Model.User.Id });
