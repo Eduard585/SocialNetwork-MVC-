@@ -8,4 +8,4 @@ ectronic typesetting, remaining essentially unchanged
 . It was popularised in the 1960s with the release of
  Letraset sheets containing Lorem Ipsum passages, a
 nd more recently with desktop publishing software lik
-e Aldus PageMaker including versions of Lorem Ipsum.
+e Aldus PageMaker including versions of Lorem GERMAN
